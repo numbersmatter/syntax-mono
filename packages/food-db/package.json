@@ -1,0 +1,7 @@
+{
+  "name": "@syntax-mono/food-db",
+  "exports": {},
+  "dependencies": {
+    "typescript": "^5.7.2"
+  }
+}
