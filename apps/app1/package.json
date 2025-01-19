@@ -2,6 +2,9 @@
   "name": "@syntax-mono/app1",
   "private": true,
   "type": "module",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
