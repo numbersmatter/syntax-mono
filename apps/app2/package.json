@@ -1,5 +1,5 @@
 {
-  "name": "apps-app2",
+  "name": "@syntax-mono/app2",
   "private": true,
   "type": "module",
   "scripts": {
