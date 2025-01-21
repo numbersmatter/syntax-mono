@@ -1,4 +1,4 @@
-import { initializeFirestoreFoodPantryDb } from "@syntax-mono/food-db";
+import { initializeFirestoreFoodPantryDb } from "./init-food-pantry-db";
 import { getServerEnv } from "~/env.server";
 
 const { SERVICE_ACCOUNT, FIREBASE_APP_NAME } = getServerEnv();

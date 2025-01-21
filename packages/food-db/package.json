@@ -1,31 +1,35 @@
 {
   "name": "@syntax-mono/food-db",
-  "files": [
-    "dist"
-  ],
+  "type": "module",
+  "main": "dist",
   "exports": {
-    "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
+        "development": "./src/index.ts",
         "default": "./dist/index.js"
       },
-      "require": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "require": "./dist/index.js"
+      "node": {
+        "import": "./src/index.ts"
       }
-    }
+    },
+    "./package.json": "./package.json"
   },
   "dependencies": {
-    "firebase-admin": "^13.0.2",
-    "typescript": "^5.7.2"
+    "firebase-admin": "^13.0.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "tsup src/index.ts --config tsup.config.ts"
+    "build": "tsup src/index.ts --config tsup.config.ts",
+    "build:dev": "tsup src/index.ts --config tsup.dev.config.ts",
+    "typecheck": "tsc"
   },
   "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.7.2",
+    "zod": "^3.23.8",
     "tsup": "^8.3.5"
   }
 }
