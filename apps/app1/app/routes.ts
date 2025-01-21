@@ -13,5 +13,10 @@ export default [
       index("routes/events/events.tsx"),
       route("create", "routes/events/create-event.tsx"),
     ]),
+    ...prefix("semesters", [
+      index("routes/semesters/semesters.tsx"),
+      route("create", "routes/semesters/create.tsx"),
+      route(":semesterId", "routes/semesters/semesterId.tsx"),
+    ]),
   ]),
 ] satisfies RouteConfig;
