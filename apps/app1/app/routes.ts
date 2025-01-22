@@ -19,4 +19,6 @@ export default [
       route(":semesterId", "routes/semesters/semesterId.tsx"),
     ]),
   ]),
+  route("login", "routes/login/login.tsx"),
+  route("logout", "routes/logout.ts"),
 ] satisfies RouteConfig;
