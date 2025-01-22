@@ -2,16 +2,18 @@
 import { ChevronRightIcon, PackageOpenIcon } from 'lucide-react';
 import { Link, type LoaderFunctionArgs } from 'react-router';
 import type { Route } from './+types/semesters';
-import { listItems } from './db.server';
+import { getSemesters, listItems } from './db.server';
+
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
+
   const testsemester = {
     id: '1',
     name: 'Spring 2025',
     type: 'Semester',
   };
 
-  const semesters = [testsemester];
+  const semesters = await getSemesters();
   const items = await listItems();
 
   return { semesters, items };
@@ -44,7 +46,7 @@ export default function SemestersPage({ loaderData }: Route.ComponentProps) {
                 <p className="text-sm font-semibold leading-6 text-gray-900">
                   <Link to={`/semesters/${semester.id}`}>
                     <span className="absolute inset-x-0 -top-px bottom-0" />
-                    {semester.name}, {semester.type}
+                    {semester.name},
                   </Link>
                 </p>
                 <p className="mt-1 flex text-xs leading-5 text-gray-500">

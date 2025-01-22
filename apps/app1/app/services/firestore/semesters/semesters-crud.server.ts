@@ -8,7 +8,6 @@ import {
   Timestamp,
 } from "firebase-admin/firestore";
 import type * as m from "./semester-types";
-import { write } from "fs";
 
 const firestoreConverter = {
   toFirestore: (semester: m.SemesterAppModel) => {
@@ -86,12 +85,19 @@ const semesterDb = ({
     return docRef.id;
   };
 
+  const list = async () => {
+    const querySnapshot = await readCollection.get();
+    const docs = querySnapshot.docs.map((doc) => doc.data());
+    return docs;
+  };
+
   return {
     read,
     create,
     update,
     collection: readCollection,
     collection_danger: CollectionReference,
+    list,
   };
 };
 

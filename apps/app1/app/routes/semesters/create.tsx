@@ -14,19 +14,17 @@ import { Form, useActionData } from "react-router";
 // import { semesterschemas } from "./schemas";
 import type { Route } from "./+types/create";
 import { z } from 'zod';
+import { CreateSemesterSchema } from "./schemas";
+import { requireAuth } from "~/services/firebase-auth/auth-funcs.server";
+import { createSemester } from "./db.server";
 
-export const CreateSemesterSchema = z.object({
-  name: z.string().min(4),
-  startDate: z.date(),
-  endDate: z.date(),
-});
+
 
 export const action = async ({ request }: Route.ActionArgs) => {
+  await requireAuth({ request });
   const formData = await request.formData();
 
-  return {
-    formData
-  }
+  return createSemester(formData);
 }
 
 
@@ -62,22 +60,22 @@ export default function CreateSemesterPage() {
             Make a new semester
           </CardDescription>
         </CardHeader>
-        <Form method={"POST"} id={form.id} onSubmit={form.onSubmit}>
+        <Form method={"POST"} id={form.id} onSubmit={form.onSubmit} >
           <CardContent>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
                 <label htmlFor="name">Name</label>
-                <Input id="name" placeholder="Name of your project" />
+                <Input name={"name"} id="name" placeholder="Name of your project" />
                 <div>{fields.name.errors}</div>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <label htmlFor="startDate">Start Date</label>
-                <Input id="startDate" type="date" />
+                <Input name={fields.startDate.name} id={fields.startDate.id} type="date" />
                 <div>{fields.startDate.errors}</div>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <label htmlFor="endDate">End Date</label>
-                <Input id="endDate" type="date" />
+                <Input name={fields.endDate.name} id="endDate" type="date" />
                 <div>{fields.endDate.errors}</div>
               </div>
             </div>

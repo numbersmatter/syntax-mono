@@ -35,7 +35,7 @@ export const initializeFirestoreFoodPantryDb = ({
   const registrationsPath = collectionPaths.registrations ?? "registrations";
   const reservationsPath = collectionPaths.reservations ?? "reservations";
   const usersPath = collectionPaths.users ?? "users";
-  const semesterPath = collectionPaths.semesters ?? "users";
+  const semesterPath = collectionPaths.semesters ?? "semesters";
 
   const applications = applicationsDb({ firestore, path: applicationsPath });
   const events = eventsDb({ firestore, path: eventsPath });
