@@ -3,16 +3,11 @@ import { ChevronRightIcon, PackageOpenIcon } from 'lucide-react';
 import { Link, type LoaderFunctionArgs } from 'react-router';
 import type { Route } from './+types/semesters';
 import { getSemesters, listItems } from './db.server';
+import { requireAuth } from '~/services/firebase-auth/auth-funcs.server';
 
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-
-  const testsemester = {
-    id: '1',
-    name: 'Spring 2025',
-    type: 'Semester',
-  };
-
+  await requireAuth({ request });
   const semesters = await getSemesters();
   const items = await listItems();
 

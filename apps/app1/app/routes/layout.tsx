@@ -2,6 +2,8 @@ import { Form, Link, Outlet } from "react-router";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarRail, SidebarTrigger } from "~/components/ui/sidebar";
 import { Separator } from "~/components/ui/separator";
 import { Button } from "~/components/ui/button";
+import { requireAuth } from "~/services/firebase-auth/auth-funcs.server";
+import type { Route } from "./+types/layout";
 
 
 // This is sample data.
@@ -38,7 +40,10 @@ const data = {
     },
   ],
 }
-
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  await requireAuth({ request });
+  return {};
+};
 
 
 export default function MainLayout() {

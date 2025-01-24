@@ -12,6 +12,14 @@ export default [
     ...prefix("events", [
       index("routes/events/events.tsx"),
       route("create", "routes/events/create-event.tsx"),
+      route(":eventId", "routes/events/eventid-nav.tsx", [
+        index("routes/events/eventIdIndex.tsx"),
+        route("edit", "routes/events/event-edit.tsx"),
+        ...prefix("pickup", [
+          index("routes/events/pickup-list.tsx"),
+          route(":reservationId", "routes/events/pickup-process.tsx"),
+        ]),
+      ]),
     ]),
     ...prefix("semesters", [
       index("routes/semesters/semesters.tsx"),
