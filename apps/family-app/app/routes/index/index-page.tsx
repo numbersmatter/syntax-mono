@@ -8,19 +8,19 @@ import { requireAuth } from "~/services/auth/clerk-auth.server";
 
 export const loader = async (args: Route.LoaderArgs) => {
   const { userId } = await requireAuth(args)
-  const testReservation = {
-    eventName: "Test reservatopm",
-    id: "1234",
-    date: new Date().toLocaleDateString(),
-    eventId: "1234",
-    status: "approved",
-    time: 1630,
-    confirm: ["TEST"],
-    time_slot: ["4:00 PM"],
-  };
-  const reservations = [testReservation]
+  // const testReservation = {
+  //   eventName: "Test reservatopm",
+  //   id: "1234",
+  //   date: new Date().toLocaleDateString(),
+  //   eventId: "1234",
+  //   status: "approved",
+  //   time: 1630,
+  //   confirm: ["TEST"],
+  //   time_slot: ["4:00 PM"],
+  // };
+  // const reservations = [testReservation]
 
-  const { openEvents } = await getIndexPageData({ userId });
+  const { openEvents, reservations } = await getIndexPageData({ userId });
 
   return { reservations, openEvents };
 };

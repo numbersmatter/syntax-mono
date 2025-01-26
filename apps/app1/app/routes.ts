@@ -21,6 +21,10 @@ export default [
         ]),
       ]),
     ]),
+    ...prefix("reservations", [
+      index("routes/reservations/reserve-index.tsx"),
+      route(":rId", "routes/reservations/process-reservation.tsx"),
+    ]),
     ...prefix("semesters", [
       index("routes/semesters/semesters.tsx"),
       route("create", "routes/semesters/create.tsx"),
