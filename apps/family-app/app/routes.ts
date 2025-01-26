@@ -8,25 +8,18 @@ import {
 
 export default [
   layout("routes/layout.tsx", [
-    index("routes/home.tsx"),
-    // ...prefix("events", [
-    //   index("routes/events/events.tsx"),
-    //   route("create", "routes/events/create-event.tsx"),
-    //   route(":eventId", "routes/events/eventid-nav.tsx", [
-    //     index("routes/events/eventIdIndex.tsx"),
-    //     route("edit", "routes/events/event-edit.tsx"),
-    //     ...prefix("pickup", [
-    //       index("routes/events/pickup-list.tsx"),
-    //       route(":reservationId", "routes/events/pickup-process.tsx"),
-    //     ]),
-    //   ]),
-    // ]),
-    // ...prefix("semesters", [
-    //   index("routes/semesters/semesters.tsx"),
-    //   route("create", "routes/semesters/create.tsx"),
-    //   route(":semesterId", "routes/semesters/semesterId.tsx"),
-    // ]),
+    index("routes/index/index-page.tsx"),
+    ...prefix("events", [
+      index("routes/home.tsx"),
+      route(":eventId", "routes/events/event-id.tsx"),
+    ]),
+    ...prefix("reservations", [
+      index("routes/reservations/res-index.tsx"),
+      route(":rId", "routes/reservations/reservation-id.tsx"),
+    ]),
   ]),
-  route("login", "routes/login/login.tsx"),
-  route("logout", "routes/logout.ts"),
+  route("login", "routes/login.tsx"),
+  route("sign-up", "routes/sign-up.tsx"),
+
+  // route("logout", "routes/logout.ts"),
 ] satisfies RouteConfig;

@@ -27,9 +27,9 @@ export const getServerEnv = () => initEnvVariables();
 
 // manunally add client env variables
 export const getClientEnv = () => {
-  const serverEnv = getServerEnv();
+  const { CLERK_PUBLISHABLE_KEY } = getServerEnv();
 
-  return {};
+  return { CLERK_PUBLISHABLE_KEY };
 };
 
 export type CLIENT_ENV = ReturnType<typeof getClientEnv>;

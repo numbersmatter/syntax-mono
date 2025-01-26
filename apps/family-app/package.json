@@ -10,9 +10,11 @@
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
+    "typegen": "react-router typegen --watch",
     "reveal": "react-router reveal"
   },
   "dependencies": {
+    "@clerk/react-router": "^1.0.1",
     "@conform-to/react": "^1.2.2",
     "@conform-to/zod": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.5",
