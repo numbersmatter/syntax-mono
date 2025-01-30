@@ -30,6 +30,10 @@ export default [
       route("create", "routes/semesters/create.tsx"),
       route(":semesterId", "routes/semesters/semesterId.tsx"),
     ]),
+    ...prefix("users", [
+      index("routes/users/users-index.tsx"),
+      route(":userId", "routes/users/user-id.tsx"),
+    ]),
   ]),
   route("login", "routes/login/login.tsx"),
   route("logout", "routes/logout.ts"),

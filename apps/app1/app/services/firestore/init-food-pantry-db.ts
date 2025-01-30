@@ -7,6 +7,7 @@ import { registrationsDb } from "./registrations/registrations-crud.server";
 import { reservationsDb } from "./reservations/crud.server";
 import { UserDb } from "./users/crud.server";
 import { semesterDb } from "./semesters/semesters-crud.server";
+import { orgCollection } from "./organization/crud-server.server";
 
 // This is your packages entry point, everything exported from here will be accessible to the end-user.
 
@@ -36,6 +37,7 @@ export const initializeFirestoreFoodPantryDb = ({
   const reservationsPath = collectionPaths.reservations ?? "reservations";
   const usersPath = collectionPaths.users ?? "users";
   const semesterPath = collectionPaths.semesters ?? "semesters";
+  const organizationPath = collectionPaths.organization ?? "organization";
 
   const applications = applicationsDb({ firestore, path: applicationsPath });
   const events = eventsDb({ firestore, path: eventsPath });
@@ -43,6 +45,11 @@ export const initializeFirestoreFoodPantryDb = ({
   const reservations = reservationsDb({ firestore, path: reservationsPath });
   const users = UserDb({ firestore, path: usersPath });
   const semesters = semesterDb({ firestore, path: semesterPath });
+  const organization = orgCollection({
+    firestore,
+    path: organizationPath,
+    special_paths: { active_semester: "active_semester" },
+  });
 
   const foodPantryDb = {
     applications,
@@ -51,6 +58,7 @@ export const initializeFirestoreFoodPantryDb = ({
     reservations,
     users,
     semesters,
+    organization,
   };
   return {
     foodPantryDb,

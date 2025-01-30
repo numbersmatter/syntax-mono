@@ -12,6 +12,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@clerk/react-router": "^1.0.1",
     "@conform-to/react": "^1.2.2",
     "@conform-to/zod": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.5",
