@@ -65,8 +65,6 @@ export const getEventStats = async ({ eventId }: { eventId: string }) => {
     eventId,
   });
 
-  // const { semesterId} = await getActiveSemester()
-
   // order reservations by date requested
   const reservations = reservationsDocs.sort(
     (a, b) => a.createdDate.valueOf() - b.createdDate.valueOf()
