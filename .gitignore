@@ -170,3 +170,6 @@ dist
 
 .nx/cache
 .nx/workspace-data
+apps/app1/.env.drive.txt
+apps/app1/.env.production.txt
+apps/app1/.env.youtube

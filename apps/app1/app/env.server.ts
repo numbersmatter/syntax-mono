@@ -4,11 +4,11 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]),
   FIREBASE_API_KEY: z.string().min(1),
   COOKIE_SECRET: z.string().min(1),
-  SERVICE_ACCOUNT: z.string().min(1),
   FIREBASE_APP_NAME: z.string().default("default"),
   CLERK_PUBLISHABLE_KEY: z.string().min(1),
-  SIGN_IN_PATH: z.string().min(1),
   CLERK_SECRET_KEY: z.string().min(5),
+  SIGN_IN_PATH: z.string().min(1),
+  SERVICE_ACCOUNT: z.string().min(1),
 });
 
 export const initEnvVariables = () => {

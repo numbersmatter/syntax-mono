@@ -18,7 +18,7 @@ export default [
       route(":rId", "routes/reservations/reservation-id.tsx"),
     ]),
   ]),
-  route("login", "routes/login.tsx"),
+  route("login/*", "routes/login.tsx"),
   route("sign-up", "routes/sign-up.tsx"),
 
   // route("logout", "routes/logout.ts"),

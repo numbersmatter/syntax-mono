@@ -32,7 +32,7 @@ export const action = async (args: ActionFunctionArgs) => {
 export default function IndexRoute() {
   return (
     <>
-      <h1>test</h1>
+
       <EventsCard />
       <ReservationsCard />
     </>

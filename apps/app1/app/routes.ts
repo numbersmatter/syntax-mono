@@ -35,6 +35,7 @@ export default [
       route(":userId", "routes/users/user-id.tsx"),
     ]),
   ]),
+  // layout("routes/layout.tsx", []),
   route("login", "routes/login/login.tsx"),
   route("logout", "routes/logout.ts"),
 ] satisfies RouteConfig;

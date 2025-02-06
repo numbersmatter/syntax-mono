@@ -57,7 +57,43 @@ const getResIdData = async ({
   return { language, reservation, event: eventDoc };
 };
 
-export { getResIdData };
+const getReservations = async ({
+  userId,
+  eventIds,
+}: {
+  userId: string;
+  eventIds: string[];
+}) => {
+  const reservationDocs = await foodPantryDb.reservations.checkUserReservations(
+    {
+      userId,
+      eventIdArray: eventIds,
+    }
+  );
+
+  // const testReservation ={
+  //   id: "test-1",
+  //   eventName: "Test Event",
+  //   date: new Date("11-14-2024"),
+  //   time_slot: "4:00 PM",
+  //   confirm: "TEST",
+  //   status: "approved",
+  // }
+
+  // return [ testReservation]
+
+  return reservationDocs.map((doc) => {
+    return {
+      id: doc.id,
+      eventId: doc.eventId,
+      time: doc.time,
+      confirm: doc.confirm,
+      status: doc.status,
+    };
+  });
+};
+
+export { getResIdData, getReservations };
 
 //
 // Data

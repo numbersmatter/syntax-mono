@@ -25,7 +25,7 @@ export default function Login() {
               </span>
             </Link>
           </p> */}
-          {/* <SignIn
+          <SignIn
             appearance={{
               elements: {
                 "cl-logoBox": "h-34"
@@ -33,7 +33,7 @@ export default function Login() {
             }
 
             }
-          /> */}
+          />
 
           {/* <pre>{JSON.stringify(authTry, null, 2)}</pre> */}
         </main>

@@ -3,6 +3,7 @@ import { getResIdData } from "./data.server";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Link } from "react-router";
 import type { Route } from "./+types/reservation-id";
+import { Button } from "~/components/ui/button";
 
 
 
@@ -61,13 +62,15 @@ export default function ReservationCard({ loaderData }: Route.ComponentProps) {
           </p>
         </div>
         <pre>
-          {JSON.stringify(event, null, 2)}
+
         </pre>
       </CardContent>
       <CardFooter className="flex flex-col justify-between gap-6 md:flex-row md:gap-8 ">
 
         <Link to={"/"} className="w-full md:w-auto">
-          Back
+          <Button>
+            Back
+          </Button>
         </Link>
       </CardFooter>
     </Card>
