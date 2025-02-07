@@ -3,6 +3,16 @@ import { data, redirect } from "react-router";
 import { foodPantryDb } from "~/services/firestore/firestore-connection.server";
 import { ApproveReservaitonSchema } from "./schemas";
 
+//
+// Data Fetchers
+//
+
+const getReservationsAll = async ({}: {}) => {
+  const reservationAll = await foodPantryDb.reservations.list();
+
+  return { reservationAll };
+};
+
 const getResIdData = async ({ reservationId }: { reservationId: string }) => {
   const reservationDoc = await foodPantryDb.reservations.read(reservationId);
   if (!reservationDoc) {
@@ -15,7 +25,7 @@ const getResIdData = async ({ reservationId }: { reservationId: string }) => {
   return { reservation: reservationDoc };
 };
 
-export { getResIdData };
+export { getResIdData, getReservationsAll };
 
 //
 // Data

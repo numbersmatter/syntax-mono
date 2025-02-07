@@ -17,8 +17,12 @@ export const loader = async (args: Route.LoaderArgs) => {
   return { reservations };
 };
 
-export default function ResHome() {
+export default function ResHome({ loaderData }: Route.ComponentProps) {
+  const { reservations } = loaderData;
   return <div>
     <h1>test</h1>
+    <pre>
+      {JSON.stringify(reservations, null, 2)}
+    </pre>
   </div>;
 }

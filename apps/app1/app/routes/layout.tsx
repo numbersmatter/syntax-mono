@@ -27,15 +27,19 @@ const data = {
         {
           title: "Semesters",
           url: "/semesters",
-        }
+        },
+        {
+          title: "Reservations",
+          url: "/reservations",
+        },
         // {
         //   title: "Applications",
         //   url: "/applications",
         // },
-        // {
-        //   title: "Users",
-        //   url: "/users",
-        // }
+        {
+          title: "Users",
+          url: "/users",
+        },
       ],
     },
   ],
