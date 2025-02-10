@@ -60,8 +60,47 @@ const getUserIndexData = async () => {
       status: application.status,
     };
   });
+  const userDocs = await foodPantryDb.users.list();
 
-  return { clerkUsers, allUsers };
+  const userData = allUsers.map((user) => {
+    const doc = userDocs.find((doc) => doc.id === user.userId);
+    return {
+      id: user.userId,
+      fname: user.fname ?? "error",
+      lname: user.lname ?? "error",
+      status: doc ? "hasDoc" : "noDoc",
+      lastSign: user.lastSignInAt,
+      clerkId: user.clerkId,
+    };
+  });
+
+  const hasDoc = clerkUsers
+    .filter((user) => userDocs.find((doc) => doc.id === user.userId))
+    .map((user) => {
+      const doc = userDocs.find((doc) => doc.id === user.userId);
+      return {
+        id: user.userId,
+        fname: user.fname ?? "error",
+        lname: user.lname ?? "error",
+        lastSign: user.lastSignInAt,
+        clerkId: user.clerkId,
+        students: doc?.students.length ?? 0,
+      };
+    });
+
+  const noDocs = clerkUsers
+    .filter((user) => !userDocs.find((doc) => doc.id === user.userId))
+    .map((user) => {
+      return {
+        id: user.userId,
+        fname: user.fname ?? "error",
+        lname: user.lname ?? "error",
+        lastSign: user.lastSignInAt,
+        clerkId: user.clerkId,
+      };
+    });
+
+  return { clerkUsers, allUsers, userData, hasDoc, noDocs };
 };
 
 const getUserIdData = async ({ userId }: { userId: string }) => {
