@@ -14,6 +14,7 @@ export default [
       route("create", "routes/events/create-event.tsx"),
       route(":eventId", "routes/events/eventid-nav.tsx", [
         index("routes/events/eventIdIndex.tsx"),
+        route("reservations", "routes/events/reservation-request.tsx"),
         route("edit", "routes/events/event-edit.tsx"),
         ...prefix("pickup", [
           index("routes/events/pickup-list.tsx"),

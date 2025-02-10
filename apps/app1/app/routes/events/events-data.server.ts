@@ -50,6 +50,21 @@ export const getEventData = async ({ eventId }: { eventId: string }) => {
   return { event: eventDoc, pickupTimes: timeSlotsArray, tabs };
 };
 
+export const getReservationRequests = async ({
+  eventId,
+}: {
+  eventId: string;
+}) => {
+  const reservationsDocs = await foodPantryDb.reservations.listByEvent({
+    eventId,
+  });
+
+  // order reservations by date requested
+  return reservationsDocs.sort(
+    (a, b) => a.createdDate.valueOf() - b.createdDate.valueOf()
+  );
+};
+
 // Event Index Page
 export const getEventStats = async ({ eventId }: { eventId: string }) => {
   const eventDoc = await foodPantryDb.events.read({ eventId });
@@ -60,18 +75,11 @@ export const getEventStats = async ({ eventId }: { eventId: string }) => {
 
   const { semesterId } = eventDoc;
 
-  //  get all reservations for the events
-  const reservationsDocs = await foodPantryDb.reservations.listByEvent({
-    eventId,
-  });
-
   // order reservations by date requested
-  const reservations = reservationsDocs.sort(
-    (a, b) => a.createdDate.valueOf() - b.createdDate.valueOf()
-  );
+  const reservations = await getReservationRequests({ eventId });
 
   //  get a list of approved reservations
-  const approvedReservations = reservationsDocs.filter(
+  const approvedReservations = reservations.filter(
     (r) => r.status == "approved"
   );
 
