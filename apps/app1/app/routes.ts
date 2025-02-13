@@ -33,7 +33,10 @@ export default [
     ]),
     ...prefix("users", [
       index("routes/users/users-index.tsx"),
-      route(":userId", "routes/users/user-id.tsx"),
+      route(":userId", "routes/users/user-id.tsx", [
+        index("routes/users/userid-index.tsx"),
+        route("students", "routes/users/update-students.tsx"),
+      ]),
     ]),
   ]),
   // layout("routes/layout.tsx", []),
