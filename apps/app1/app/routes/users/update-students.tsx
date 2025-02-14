@@ -6,8 +6,21 @@ import { DropdownMenuRadioGroup } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import type { Route } from "./+types/update-students";
+import { requireAuth } from "~/services/firebase-auth/auth-funcs.server";
+import { addStudent } from "./data.server";
+import { parseWithZod } from "@conform-to/zod";
+import { AddStudentSchema } from "./schemas";
 
 
+
+export async function action({ request, params }: Route.ActionArgs) {
+  const { user } = await requireAuth({ request });
+  const formData = await request.formData();
+
+  return await addStudent({ formData, userId: params.userId })
+
+}
 
 
 
@@ -29,6 +42,9 @@ function CreateStudentForm({ formId }: { formId: string }) {
 
   const [form, fields] = useForm({
     id: formId,
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: AddStudentSchema })
+    },
     defaultValue: {
       fname: "",
       lname: "",

@@ -2,6 +2,9 @@ import { getServerEnv } from "~/env.server";
 import { foodPantryDb } from "~/services/firestore/firestore-connection.server";
 import { createClerkClient } from "@clerk/react-router/api.server";
 import { getActiveSemester } from "~/services/firestore/semesters/semesters-crud.server";
+import { parseWithZod } from "@conform-to/zod";
+import { AddStudentSchema, RemoveStudentSchema } from "./schemas";
+import { data, redirect } from "react-router";
 
 const getApplications = async () => {
   const { semesterId } = await getActiveSemester();
@@ -111,26 +114,104 @@ const getUserIdData = async ({ userId }: { userId: string }) => {
     secretKey: CLERK_SECRET_KEY,
   });
 
-  const clerkUser = await clerkClient.users.getUser(clerkUserId);
+  try {
+    const clerkUser = await clerkClient.users.getUser(clerkUserId);
 
-  const userDoc = await foodPantryDb.users.read({ id: userId });
-  const address = {
-    street: userDoc?.address.street ?? "none",
-    unit: userDoc?.address.unit ?? "none",
-    city: userDoc?.address.city ?? "none",
-    state: userDoc?.address.state ?? "none",
-    zip: userDoc?.address.zip ?? "none",
-  };
+    const userDoc = await foodPantryDb.users.read({ id: userId });
+    const address = {
+      street: userDoc?.address.street ?? "none",
+      unit: userDoc?.address.unit ?? "none",
+      city: userDoc?.address.city ?? "none",
+      state: userDoc?.address.state ?? "none",
+      zip: userDoc?.address.zip ?? "none",
+    };
 
-  const email = clerkUser.primaryEmailAddress?.emailAddress ?? "none";
+    const email = clerkUser.primaryEmailAddress?.emailAddress ?? "none";
 
-  const fname = clerkUser.firstName ?? "No_First_Name";
-  const lname = clerkUser.lastName ?? "No_Last_Name";
-  const students = userDoc?.students ?? [];
-  const adults = userDoc?.household_adults ?? 1;
-  const phone = clerkUser.primaryPhoneNumber?.phoneNumber ?? "No Phone";
+    const fname = clerkUser.firstName ?? "No_First_Name";
+    const lname = clerkUser.lastName ?? "No_Last_Name";
+    const students = userDoc?.students ?? [];
+    const adults = userDoc?.household_adults ?? 1;
+    const phone = clerkUser.primaryPhoneNumber?.phoneNumber ?? "No Phone";
 
-  return { address, email, fname, lname, students, adults, userId, phone };
+    return { address, email, fname, lname, students, adults, userId, phone };
+  } catch (error) {
+    throw data(`User: ${userId} not Found`, { status: 404 });
+  }
 };
 
 export { getUserIndexData, getUserIdData };
+
+//
+// Data Mutations
+//
+
+const addStudent = async ({
+  formData,
+  userId,
+}: {
+  userId: string;
+  formData: FormData;
+}) => {
+  const submission = parseWithZod(formData, { schema: AddStudentSchema });
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  // check if user exists
+  const userDoc = await foodPantryDb.users.read({ id: userId });
+
+  // if it does exist go down the happy path
+  if (userDoc) {
+    await foodPantryDb.users.addStudent({
+      userId,
+      student: submission.value,
+    });
+    return redirect(`/users/${userId}`);
+  }
+
+  // if userDoc does not exist then just if clerk has user
+  // if clerk has that userId it will return the userData
+  // if not it will error and be caught by error boundary
+  const userData = await getUserIdData({ userId });
+
+  // create the user doc for the user
+
+  await foodPantryDb.users.create({
+    language: "en",
+    email: userData.email,
+    userId,
+  });
+
+  await foodPantryDb.users.addStudent({
+    userId,
+    student: submission.value,
+  });
+
+  return redirect(`/users/${userId}`);
+};
+
+const removeStudent = async ({
+  formData,
+  userId,
+}: {
+  formData: FormData;
+  userId: string;
+}) => {
+  const submission = parseWithZod(formData, {
+    schema: RemoveStudentSchema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  const { studentId } = submission.value;
+
+  return await foodPantryDb.users.removeStudent({
+    userId,
+    studentId,
+  });
+};
+
+export { addStudent, removeStudent };
