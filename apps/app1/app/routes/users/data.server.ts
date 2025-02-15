@@ -6,6 +6,12 @@ import { parseWithZod } from "@conform-to/zod";
 import { AddStudentSchema, RemoveStudentSchema } from "./schemas";
 import { data, redirect } from "react-router";
 
+export const getEvents = async () => {
+  const allEvents = await foodPantryDb.events.list();
+
+  return allEvents;
+};
+
 const getApplications = async () => {
   const { semesterId } = await getActiveSemester();
   const applicationSnapshot = await foodPantryDb.applications.collection
@@ -140,7 +146,44 @@ const getUserIdData = async ({ userId }: { userId: string }) => {
   }
 };
 
-export { getUserIndexData, getUserIdData };
+const getUserHistoryReservations = async ({ userId }: { userId: string }) => {
+  const resQuerySnap = await foodPantryDb.reservations.collection
+    .where("userId", "==", userId)
+    .get();
+
+  const resDocs = resQuerySnap.docs.map((snap) => snap.data());
+
+  const eventIds = resDocs.map((doc) => doc.eventId);
+
+  const eventReadPromises = eventIds.map((eventId) => {
+    return foodPantryDb.events.read({ eventId });
+  });
+
+  const eventPromiseArray = await Promise.allSettled(eventReadPromises);
+
+  const eventsSuccess = eventPromiseArray
+    .filter((p) => p.status === "fulfilled")
+    .map((e) => e.value);
+
+  const eventsDocs = eventsSuccess.filter((p) => p != null);
+
+  const eventsDocsIds = eventsDocs.map((doc) => doc.id);
+
+  //  filter to reservations with a corresponding event doc
+
+  const resDocWEvent = resDocs.map((resDoc) => {
+    const eventDoc = eventsDocs.find((event) => event.id === resDoc.eventId);
+    return {
+      ...resDoc,
+      eventName: eventDoc ? eventDoc.name : "error name",
+      eventDate: eventDoc ? eventDoc.eventDate : null,
+    };
+  });
+
+  return resDocWEvent;
+};
+
+export { getUserIndexData, getUserIdData, getUserHistoryReservations };
 
 //
 // Data Mutations
