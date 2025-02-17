@@ -39,3 +39,8 @@ export const AddReservationSchema = z.object({
   timeSlot: z.string(),
   eventId: z.string(),
 });
+
+export const RequestReservationSchema = z.object({
+  eventId: z.string().min(15),
+  time: z.coerce.number().min(800).max(2300),
+});

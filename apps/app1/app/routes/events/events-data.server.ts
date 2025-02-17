@@ -6,15 +6,37 @@ import {
   ChangeStageSchema,
   CreateNewEventSchema,
   RemovePickupTime,
+  RequestReservationSchema,
 } from "./schemas";
 import { convertTo12Hour } from "~/lib/utils";
 import { parseWithZod } from "@conform-to/zod";
+import { getServerEnv } from "~/env.server";
+import { createClerkClient } from "@clerk/react-router/api.server";
+import type { PrimaryContact } from "~/services/firestore/common-types";
+import { getClerkClient } from "~/services/clerk/clerk-interface.server";
 
 // Data fetchers
 export const getEvents = async () => {
   const allEvents = await foodPantryDb.events.list();
 
   return allEvents;
+};
+
+export const getClerkData = async ({ userId }: { userId: string }) => {
+  const clerkId = "user_" + userId;
+
+  const clerk = getClerkClient();
+
+  const clerkUser = await clerk.users.getUser(clerkId);
+
+  const userData = {
+    fname: clerkUser.firstName,
+    lname: clerkUser.lastName,
+  };
+
+  return {
+    userData,
+  };
 };
 
 export const getEventData = async ({ eventId }: { eventId: string }) => {
@@ -199,6 +221,40 @@ export const getReservationProcessData = async ({
   return { reservation };
 };
 
+export const getAddableFamilies = async ({ eventId }: { eventId: string }) => {
+  const reservations = await getReservationRequests({ eventId });
+  const clerk = getClerkClient();
+
+  const clerkUsersObjects = (await clerk.users.getUserList({ limit: 50 })).data;
+
+  const clerkUsers = clerkUsersObjects.map((user) => {
+    const userId = user.id.split("_", 2)[1];
+
+    return {
+      clerkId: user.id,
+      userId,
+      fname: user.firstName,
+      lname: user.lastName,
+      lastSignInAt: user.lastSignInAt,
+    };
+  });
+
+  const reservationUserIds = reservations.map((r) => r.userId);
+
+  const addableFamilies = clerkUsers
+    .filter((user) => !reservationUserIds.includes(user.userId))
+    .map((clerkUser) => {
+      return {
+        userId: clerkUser.userId,
+        fname: clerkUser.fname ?? "error  first name",
+        lname: clerkUser.lname ?? "error last name",
+        clerkId: clerkUser.clerkId,
+      };
+    });
+
+  return addableFamilies;
+};
+
 //
 // Data mutations
 //
@@ -325,10 +381,83 @@ const confirmPickup = async ({
   return redirect(`/events/${eventId}/pickup`);
 };
 
+const requestReservation = async ({
+  eventId,
+  userId,
+  clerkId,
+  time,
+}: {
+  eventId: string;
+  userId: string;
+  clerkId: string;
+  time: number;
+}) => {
+  //  does a reservation for this event already exist?
+  //  if so, redirect to that reservation
+  //  if not, create a new reservation
+
+  const existingReservation = await foodPantryDb.reservations.checkReservation({
+    userId,
+    eventId,
+  });
+
+  if (existingReservation) {
+    return { status: "error-already" };
+  }
+
+  const clerk = getClerkClient();
+
+  const clerkUser = await clerk.users.getUser(clerkId);
+
+  const reservationData = {
+    eventId,
+    userId,
+    fname: clerkUser.firstName ?? "error fname",
+    lname: clerkUser.lastName ?? " error lname",
+    email: clerkUser.primaryEmailAddress?.emailAddress ?? "error email",
+    phone: clerkUser.primaryPhoneNumber?.phoneNumber ?? "error phone",
+    time,
+  };
+
+  const newReservationId = await foodPantryDb.reservations.makeReservation(
+    reservationData
+  );
+
+  return { status: "success", reservationId: newReservationId };
+};
+
+const staffReservationRequest = async ({
+  formData,
+  userId,
+}: {
+  formData: FormData;
+  userId: string;
+}) => {
+  const submission = parseWithZod(formData, {
+    schema: RequestReservationSchema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  const clerkId = "user_" + userId;
+
+  await requestReservation({
+    eventId: submission.value.eventId,
+    userId,
+    clerkId,
+    time: submission.value.time,
+  });
+
+  return redirect(`/events/${submission.value.eventId}/add-family`);
+};
+
 export const mutations = {
   changeStage,
   addPickupTime,
   removePickupTime,
   makeEvent,
   confirmPickup,
+  staffReservationRequest,
 };
