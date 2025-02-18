@@ -7,7 +7,7 @@ import type { Route } from "./+types/add-family";
 import { requireAuth } from "~/services/firebase-auth/auth-funcs.server";
 import { getAddableFamilies } from "./events-data.server";
 import { Card, CardContent } from "~/components/ui/card";
-import { Link, useFetcher } from "react-router";
+import { Link, useFetcher, useParams } from "react-router";
 
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -139,8 +139,19 @@ function AddFamilyFetcher({ userId, clerkId }: { userId: string, clerkId: string
 
 function UnaddedFamilyTable({ families }: { families: UserRow[] }) {
 
+  const { eventId } = useParams();
 
   return (
-    <DataTable columns={columns} data={families} />
+    <div>
+
+      <DataTable columns={columns} data={families} />
+      <div>
+        <Link to={`/events/${eventId}`}>
+          <Button variant={"secondary"}>
+            Back
+          </Button>
+        </Link>
+      </div>
+    </div>
   )
 } 

@@ -3,6 +3,7 @@ import type { Route } from "./+types/eventIdIndex";
 import { getEventStats } from "./events-data.server";
 import { ChevronRightIcon } from "lucide-react";
 import { convertTo12Hour } from "~/lib/utils";
+import { Button } from "~/components/ui/button";
 // import { ChartConfig } from "~/staff/components/ui/chart";
 // import { TestChart } from "./test-chart";
 
@@ -46,12 +47,25 @@ export default function EventIdIndex({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
+      <AddFamilyNavition />
       <ReportingCards />
       <RequestList />
     </>
   )
 }
 
+
+function AddFamilyNavition() {
+
+  return <div className="flex gap-4 py-4 px-4">
+    <Link to="add-family" className="text-blue-600">
+      <Button>
+        Add Family
+      </Button>
+    </Link>
+  </div>
+
+}
 
 function ReportingCards() {
   const {
