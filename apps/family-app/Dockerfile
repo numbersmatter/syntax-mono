@@ -13,7 +13,7 @@ COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run -r build
 # set the package name here 
-RUN pnpm --filter=app1 --prod  deploy appout
+RUN pnpm --filter=family-app --prod  deploy appout
 
 FROM base AS final
 WORKDIR /app

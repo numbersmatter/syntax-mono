@@ -41,6 +41,7 @@ export default [
         index("routes/users/userid-index.tsx"),
         route("students", "routes/users/update-students.tsx"),
         route("create-reservation", "routes/users/create-reservation.tsx"),
+        route("adults", "routes/users/update-adults.tsx"),
       ]),
     ]),
   ]),

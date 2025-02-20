@@ -183,8 +183,6 @@ const getUserHistoryReservations = async ({ userId }: { userId: string }) => {
   return resDocWEvent;
 };
 
-export { getUserIndexData, getUserIdData, getUserHistoryReservations };
-
 //
 // Data Mutations
 //
@@ -257,4 +255,10 @@ const removeStudent = async ({
   });
 };
 
-export { addStudent, removeStudent };
+export {
+  addStudent,
+  removeStudent,
+  getUserIndexData,
+  getUserIdData,
+  getUserHistoryReservations,
+};

@@ -1,6 +1,5 @@
 import { requireAuth } from "~/services/auth/clerk-auth.server";
 import type { Route } from "./+types/res-index";
-import { getReservations } from "./data.server";
 import { getIndexPageData } from "../index/data.server";
 
 export function meta({ }: Route.MetaArgs) {
@@ -10,7 +9,7 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
-export const loader = async (args: Route.LoaderArgs) => {
+export async function loader(args: Route.LoaderArgs) {
   const { userId } = await requireAuth(args);
   const { reservations } = await getIndexPageData({ userId });
 
