@@ -7,12 +7,18 @@ import { Label } from "~/components/ui/label"
 import { UpdateAdultsSchema } from "./schemas"
 import type { Route } from "./+types/update-adults"
 import { requireAuth } from "~/services/firebase-auth/auth-funcs.server"
+import { updateAdultsInHH } from "./data.server"
 
 
 
 export async function action({ request, params }: Route.ActionArgs) {
   await requireAuth({ request });
   const formData = await request.formData();
+  const intent = formData.get("intent");
+
+  if (intent === "updateAdults") {
+    return await updateAdultsInHH({ formData });
+  }
 
 
   return { formData }
@@ -59,7 +65,7 @@ function UpdateAdultsForm() {
             {...getInputProps(fields.adults, { type: "number" })}
             key={fields.adults.key}
           />
-          <input hidden name="userId" value={userId} />
+          <input readOnly hidden name="userId" value={userId} />
           <div className="text-red-500 col-start-2 col-span-3">
             {fields.adults.errors}
           </div>

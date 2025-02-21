@@ -3,7 +3,11 @@ import { foodPantryDb } from "~/services/firestore/firestore-connection.server";
 import { createClerkClient } from "@clerk/react-router/api.server";
 import { getActiveSemester } from "~/services/firestore/semesters/semesters-crud.server";
 import { parseWithZod } from "@conform-to/zod";
-import { AddStudentSchema, RemoveStudentSchema } from "./schemas";
+import {
+  AddStudentSchema,
+  RemoveStudentSchema,
+  UpdateAdultsSchema,
+} from "./schemas";
 import { data, redirect } from "react-router";
 
 export const getEvents = async () => {
@@ -255,10 +259,32 @@ const removeStudent = async ({
   });
 };
 
+const updateAdultsInHH = async ({ formData }: { formData: FormData }) => {
+  const submission = parseWithZod(formData, {
+    schema: UpdateAdultsSchema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  const { userId, adults } = submission.value;
+
+  await foodPantryDb.users.update({
+    id: userId,
+    updateData: {
+      household_adults: adults,
+    },
+  });
+
+  return redirect(`/users/${userId}`);
+};
+
 export {
   addStudent,
   removeStudent,
   getUserIndexData,
   getUserIdData,
   getUserHistoryReservations,
+  updateAdultsInHH,
 };
