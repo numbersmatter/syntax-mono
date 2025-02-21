@@ -135,7 +135,9 @@ function UpdateEventName() {
 function UpdateEventTime() {
   const { loaderData } = useOutletContext<EventId.ComponentProps>();
   const event = loaderData.event;
-  const [newTime, setNewTime] = useState(event.eventDate.toISOString());
+  const localDate = new Date(event.eventDate);
+  const formattedDatetime = localDate.toISOString().slice(0, 16);
+  const [newTime, setNewTime] = useState(formattedDatetime);
 
   return (
     <div
@@ -147,6 +149,7 @@ function UpdateEventTime() {
         </h3>
         <div>
           <p>{event.eventDate.toLocaleDateString()}</p>
+          <p>{newTime}</p>
         </div>
         <div className="mt-6">
           <label htmlFor="time" className="block text-sm font-medium text-gray-700">
@@ -155,6 +158,7 @@ function UpdateEventTime() {
           <Input
             id="time"
             name="time"
+            type="datetime-local"
             className="mt-1 mx-auto block max-w-sm rounded-md border-gray-800 py-2 pl-3 pr-10 font-medium text-base bg-gray-200  focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
             value={newTime}
             onChange={(e) => setNewTime(e.target.value)}
