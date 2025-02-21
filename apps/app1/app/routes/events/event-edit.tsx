@@ -59,6 +59,7 @@ export default function EditEvent({ loaderData }: Route.ComponentProps) {
   const { } = loaderData;
   return (
     <>
+      <UpdateEventName />
       <PickupTimesCard />
       <ChangeStage />
     </>
@@ -66,6 +67,64 @@ export default function EditEvent({ loaderData }: Route.ComponentProps) {
 }
 
 
+function UpdateEventName() {
+  const { loaderData } = useOutletContext<EventId.ComponentProps>();
+  const event = loaderData.event;
+  const [newName, setNewName] = useState(event.name);
+
+  return (
+    <div
+      className="col-span-1 flex flex-col divide-y divide-gray-200 md:rounded-lg bg-white text-center shadow"
+    >
+      <div className="flex flex-1 flex-col p-8">
+        <h3 className="mt-6 text-xl font-medium text-gray-900">
+          Current Name
+        </h3>
+        <div>
+          <p>{event.name}</p>
+        </div>
+        <div className="mt-6">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            New Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            className="mt-1 mx-auto block max-w-sm rounded-md border-gray-800 py-2 pl-3 pr-10 font-medium text-base bg-gray-200  focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+        </div>
+      </div>
+      <div>
+        <div className="-mt-px flex divide-x divide-gray-200">
+          <div className="-ml-px flex w-0 flex-1">
+            <div
+              className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
+            >
+              <Link to={`/events/${event.id}`} className="flex justify-between gap-1">
+                <XIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
+                cancel
+              </Link>
+            </div>
+          </div>
+          <div className="flex w-0 flex-1">
+            <Form method="post"
+              className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
+            >
+              <input type="hidden" name="eventId" value={event.id} />
+              <input type="hidden" name="name" value={newName} />
+              <Button type="submit" name="intent" value="update-name" variant="outline" className="flex justify-between gap-1 ">
+                <CheckCircle2Icon aria-hidden="true" className="h-5 w-5 text-gray-400" />
+                Submit
+              </Button>
+            </Form>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 
 
