@@ -44,3 +44,9 @@ export const RequestReservationSchema = z.object({
   eventId: z.string().min(15),
   time: z.coerce.number().min(800).max(2300),
 });
+
+export const UpdateEventNameSchema = z.object({
+  eventId: z.string().min(15),
+  name: z.string().min(3),
+  intent: z.literal("update-name"),
+});

@@ -52,17 +52,22 @@ export const action = async (args: Route.ActionArgs) => {
   if (intent === 'remove-pickup-time') {
     return await mutations.removePickupTime({ formData });
   }
+
+  if (intent === 'update-name') {
+    return await mutations.updateEventName({ formData });
+  }
+
   return null;
 };
 
 export default function EditEvent({ loaderData }: Route.ComponentProps) {
   const { } = loaderData;
   return (
-    <>
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <UpdateEventName />
       <PickupTimesCard />
       <ChangeStage />
-    </>
+    </div>
   )
 }
 
@@ -87,7 +92,7 @@ function UpdateEventName() {
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
             New Name
           </label>
-          <input
+          <Input
             id="name"
             name="name"
             className="mt-1 mx-auto block max-w-sm rounded-md border-gray-800 py-2 pl-3 pr-10 font-medium text-base bg-gray-200  focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"

@@ -7,6 +7,7 @@ import {
   CreateNewEventSchema,
   RemovePickupTime,
   RequestReservationSchema,
+  UpdateEventNameSchema,
 } from "./schemas";
 import { convertTo12Hour } from "~/lib/utils";
 import { parseWithZod } from "@conform-to/zod";
@@ -453,6 +454,29 @@ const staffReservationRequest = async ({
   return redirect(`/events/${submission.value.eventId}/add-family`);
 };
 
+const updateEventName = async ({ formData }: { formData: FormData }) => {
+  const submission = parseWithZod(formData, {
+    schema: UpdateEventNameSchema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  const { name, eventId } = submission.value;
+
+  const updateData = {
+    name,
+  };
+
+  await foodPantryDb.events.update({
+    id: eventId,
+    data: updateData,
+  });
+
+  return redirect(`/events/${eventId}`);
+};
+
 export const mutations = {
   changeStage,
   addPickupTime,
@@ -460,4 +484,5 @@ export const mutations = {
   makeEvent,
   confirmPickup,
   staffReservationRequest,
+  updateEventName,
 };
