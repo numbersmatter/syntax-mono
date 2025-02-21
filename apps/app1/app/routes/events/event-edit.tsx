@@ -65,6 +65,7 @@ export default function EditEvent({ loaderData }: Route.ComponentProps) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <UpdateEventName />
+      <UpdateEventTime />
       <PickupTimesCard />
       <ChangeStage />
     </div>
@@ -134,7 +135,7 @@ function UpdateEventName() {
 function UpdateEventTime() {
   const { loaderData } = useOutletContext<EventId.ComponentProps>();
   const event = loaderData.event;
-  const [newTime, setNewTime] = useState(event.eventDate);
+  const [newTime, setNewTime] = useState(event.eventDate.toISOString());
 
   return (
     <div
@@ -145,7 +146,7 @@ function UpdateEventTime() {
           Current Time
         </h3>
         <div>
-          <p>{event.eventDate}</p>
+          <p>{event.eventDate.toLocaleDateString()}</p>
         </div>
         <div className="mt-6">
           <label htmlFor="time" className="block text-sm font-medium text-gray-700">
@@ -177,7 +178,7 @@ function UpdateEventTime() {
               className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
             >
               <input type="hidden" name="eventId" value={event.id} />
-              <input type="hidden" name="time" value={ } />
+              <input type="hidden" name="time" value={newTime} />
               <Button type="submit" name="intent" value="update-time" variant="outline" className="flex justify-between gap-1 ">
                 <CheckCircle2Icon aria-hidden="true" className="h-5 w-5 text-gray-400" />
                 Submit
