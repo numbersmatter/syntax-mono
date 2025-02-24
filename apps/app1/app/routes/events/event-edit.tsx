@@ -28,6 +28,8 @@ import { requireAuth } from "~/services/firebase-auth/auth-funcs.server";
 import type { Route } from "./+types/event-edit";
 import type { Route as EventId } from "./+types/eventid-nav"
 import { mutations } from "./events-data.server";
+import { parseWithZod } from "@conform-to/zod";
+import { UpdateEventDateTimeSchema } from "./schemas";
 
 export const loader = async (args: Route.LoaderArgs) => {
   await requireAuth(args);
@@ -55,6 +57,10 @@ export const action = async (args: Route.ActionArgs) => {
 
   if (intent === 'update-name') {
     return await mutations.updateEventName({ formData });
+  }
+
+  if (intent === 'update-time') {
+    return await mutations.updateEventTime({ formData });
   }
 
   return null;
@@ -135,9 +141,13 @@ function UpdateEventName() {
 function UpdateEventTime() {
   const { loaderData } = useOutletContext<EventId.ComponentProps>();
   const event = loaderData.event;
-  const localDate = new Date(event.eventDate);
-  const formattedDatetime = localDate.toISOString().slice(0, 16);
-  const [newTime, setNewTime] = useState(formattedDatetime);
+  const [form, fields] = useForm({
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: UpdateEventDateTimeSchema })
+    },
+  })
+
+
 
   return (
     <div
@@ -148,9 +158,11 @@ function UpdateEventTime() {
           Current Time
         </h3>
         <div>
-          <p>{event.eventDate.toLocaleDateString()}</p>
-          <p>{newTime}</p>
+          <p>{event.eventDate.toLocaleTimeString()}</p>
+
         </div>
+      </div>
+      <Form method="post">
         <div className="mt-6">
           <label htmlFor="time" className="block text-sm font-medium text-gray-700">
             New Time
@@ -160,37 +172,41 @@ function UpdateEventTime() {
             name="time"
             type="datetime-local"
             className="mt-1 mx-auto block max-w-sm rounded-md border-gray-800 py-2 pl-3 pr-10 font-medium text-base bg-gray-200  focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-            value={newTime}
-            onChange={(e) => setNewTime(e.target.value)}
+
+
           />
+          <div className="text-red-500 col-start-2 col-span-3">
+            {fields.time.errors}
+          </div>
         </div>
-      </div>
-      <div>
-        <div className="-mt-px flex divide-x divide-gray-200">
-          <div className="-ml-px flex w-0 flex-1">
-            <div
-              className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
-            >
-              <Link to={`/events/${event.id}`} className="flex justify-between gap-1">
-                <XIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
-                cancel
-              </Link>
+
+        <div>
+          <div className="-mt-px flex divide-x divide-gray-200">
+            <div className="-ml-px flex w-0 flex-1">
+              <div
+                className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
+              >
+                <Link to={`/events/${event.id}`} className="flex justify-between gap-1">
+                  <XIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
+                  cancel
+                </Link>
+              </div>
+            </div>
+            <div className="flex w-0 flex-1">
+              <div
+                className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
+              >
+                <input type="hidden" name="eventId" value={event.id} />
+
+                <Button type="submit" name="intent" value="update-time" variant="outline" className="flex justify-between gap-1 ">
+                  <CheckCircle2Icon aria-hidden="true" className="h-5 w-5 text-gray-400" />
+                  Submit
+                </Button>
+              </div>
             </div>
           </div>
-          <div className="flex w-0 flex-1">
-            <Form method="post"
-              className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
-            >
-              <input type="hidden" name="eventId" value={event.id} />
-              <input type="hidden" name="time" value={newTime} />
-              <Button type="submit" name="intent" value="update-time" variant="outline" className="flex justify-between gap-1 ">
-                <CheckCircle2Icon aria-hidden="true" className="h-5 w-5 text-gray-400" />
-                Submit
-              </Button>
-            </Form>
-          </div>
         </div>
-      </div>
+      </Form>
     </div>
   )
 }

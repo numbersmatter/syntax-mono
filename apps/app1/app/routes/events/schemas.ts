@@ -50,3 +50,9 @@ export const UpdateEventNameSchema = z.object({
   name: z.string().min(3),
   intent: z.literal("update-name"),
 });
+
+export const UpdateEventDateTimeSchema = z.object({
+  eventId: z.string().min(15),
+  intent: z.literal("update-time"),
+  time: z.coerce.date(),
+});

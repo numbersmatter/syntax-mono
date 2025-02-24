@@ -1,4 +1,4 @@
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { data, redirect } from "react-router";
 import { foodPantryDb } from "~/services/firestore/firestore-connection.server";
 import {
@@ -7,6 +7,7 @@ import {
   CreateNewEventSchema,
   RemovePickupTime,
   RequestReservationSchema,
+  UpdateEventDateTimeSchema,
   UpdateEventNameSchema,
 } from "./schemas";
 import { convertTo12Hour } from "~/lib/utils";
@@ -477,6 +478,27 @@ const updateEventName = async ({ formData }: { formData: FormData }) => {
   return redirect(`/events/${eventId}`);
 };
 
+const updateEventTime = async ({ formData }: { formData: FormData }) => {
+  const submission = parseWithZod(formData, {
+    schema: UpdateEventDateTimeSchema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  const { eventId, time } = submission.value;
+
+  await foodPantryDb.events.update({
+    id: eventId,
+    data: {
+      eventTimestamp: Timestamp.fromDate(time),
+    },
+  });
+
+  return redirect(`/events/${eventId}`);
+};
+
 export const mutations = {
   changeStage,
   addPickupTime,
@@ -485,4 +507,5 @@ export const mutations = {
   confirmPickup,
   staffReservationRequest,
   updateEventName,
+  updateEventTime,
 };

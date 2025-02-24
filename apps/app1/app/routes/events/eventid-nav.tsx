@@ -47,6 +47,12 @@ export default function Page({ loaderData }: Route.ComponentProps) {
         >
           {event.name}
         </h3>
+        <p>
+          {event.eventDate.toLocaleDateString()}
+        </p>
+        <p>
+          {event.eventDate.toLocaleTimeString()}
+        </p>
         <div className="mt-3 sm:mt-4">
 
           <div className="">
