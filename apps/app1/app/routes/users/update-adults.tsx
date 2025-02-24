@@ -25,17 +25,21 @@ export async function action({ request, params }: Route.ActionArgs) {
 }
 
 
-export default function UpdateAdults() {
+export default function UpdateAdults({ matches }: Route.ComponentProps) {
+  const routedata = matches[2]
+
+  const { adults } = routedata.data
 
   return (
     <div>
-      <UpdateAdultsForm />
+      <UpdateAdultsForm adults={adults} />
     </div>
   )
 }
 
-function UpdateAdultsForm() {
+function UpdateAdultsForm({ adults }: { adults: number }) {
   const { userId } = useParams()
+
 
   const [form, fields] = useForm({
     id: "update-adults",
@@ -43,7 +47,7 @@ function UpdateAdultsForm() {
       return parseWithZod(formData, { schema: UpdateAdultsSchema })
     },
     defaultValue: {
-      adults: 1,
+      adults: adults,
     },
   })
 

@@ -270,6 +270,35 @@ const updateAdultsInHH = async ({ formData }: { formData: FormData }) => {
 
   const { userId, adults } = submission.value;
 
+  // check if user doc exists
+  const userDoc = await foodPantryDb.users.read({ id: userId });
+
+  //  if user doc exists update adults in hh
+
+  if (userDoc) {
+    await foodPantryDb.users.update({
+      id: userId,
+      updateData: {
+        household_adults: adults,
+      },
+    });
+
+    return redirect(`/users/${userId}`);
+  }
+
+  // if userDoc does not exist then check if clerk has user
+  // if clerk has that userId it will return the userData
+  // if not it will error and be caught by error boundary
+  const userData = await getUserIdData({ userId });
+
+  // create the user doc for the user
+  await foodPantryDb.users.create({
+    language: "en",
+    email: userData.email,
+    userId,
+  });
+
+  // update user doc with adults in hh
   await foodPantryDb.users.update({
     id: userId,
     updateData: {
