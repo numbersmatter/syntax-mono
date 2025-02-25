@@ -489,10 +489,12 @@ const updateEventTime = async ({ formData }: { formData: FormData }) => {
 
   const { eventId, time } = submission.value;
 
+  const localDate = new Date(time);
+
   await foodPantryDb.events.update({
     id: eventId,
     data: {
-      eventTimestamp: Timestamp.fromDate(time),
+      eventTimestamp: Timestamp.fromDate(localDate),
     },
   });
 
