@@ -6,6 +6,7 @@ import { Car, ChevronRightIcon, PackageOpenIcon } from "lucide-react";
 import type { EventAppModel } from "~/services/firestore/events/event-types";
 import { DataTable } from "~/components/ui/data-table";
 import type { ColumnDef, SortingState } from "@tanstack/react-table"
+import { Button } from "~/components/ui/button";
 
 
 
@@ -23,7 +24,14 @@ export default function EventsIndex({ loaderData }: Route.ComponentProps) {
 
   return (
     <div>
-      <h1>Events Index</h1>
+
+      <div className="flex justify-between items-center py-2 px-2">
+        <Link to="create">
+          <Button>
+            Create Event
+          </Button>
+        </Link>
+      </div>
       <EventsHistoryTable events={events} />
       <EventsList events={events} />
     </div>

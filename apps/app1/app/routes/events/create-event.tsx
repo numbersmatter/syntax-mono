@@ -10,7 +10,7 @@ import {
 // import { mutations } from "./mutations.server";
 import { useForm } from "@conform-to/react";
 import { useState } from "react";
-import { Form, useActionData } from "react-router";
+import { Form, Link, useActionData } from "react-router";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import {
@@ -182,10 +182,15 @@ export default function CreateEvent({ loaderData }: Route.ComponentProps) {
             </div>
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex justify-between">
           <Button type="submit" className="">
             Create Event
           </Button>
+          <Link to="/events">
+            <Button type="button" variant={"secondary"}>
+              Cancel
+            </Button>
+          </Link>
         </CardFooter>
       </Form>
     </Card>
