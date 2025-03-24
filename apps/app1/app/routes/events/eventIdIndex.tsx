@@ -4,6 +4,7 @@ import { getEventStats } from "./events-data.server";
 import { ChevronRightIcon } from "lucide-react";
 import { convertTo12Hour } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
+import { getClerkDataFromUserIds } from "~/services/clerk/clerk-interface.server";
 // import { ChartConfig } from "~/staff/components/ui/chart";
 // import { TestChart } from "./test-chart";
 
@@ -29,6 +30,10 @@ export async function loader({ params }: Route.LoaderArgs) {
 
   const { stats } = eventIndexData
 
+  const clerkUsers = await getClerkDataFromUserIds({
+    userIds: eventIndexData.missingIds,
+  })
+
   return {
     ...eventIndexData,
     cardData: {
@@ -39,6 +44,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     },
     // chartConfig,
     chartData,
+    clerkUsers
   }
 }
 
@@ -49,6 +55,7 @@ export default function EventIdIndex({ loaderData }: Route.ComponentProps) {
     <>
       <AddFamilyNavition />
       <ReportingCards />
+      <MissingIds />
       <RequestList />
     </>
   )
@@ -63,6 +70,26 @@ function AddFamilyNavition() {
         Add Family
       </Button>
     </Link>
+  </div>
+
+}
+
+function MissingIds() {
+  const {
+    missingIds,
+    clerkUsers
+  } = useLoaderData<typeof loader>();
+  return <div className="px-4 py-2">
+    <h1>Missing Ids</h1>
+    <p>There are missing ids in the route</p>
+    <ul>
+      {missingIds.map((id) => {
+        return <li key={id}>{id}</li>
+      })}
+    </ul>
+    <pre>
+      {JSON.stringify(clerkUsers, null, 2)}
+    </pre>
   </div>
 
 }

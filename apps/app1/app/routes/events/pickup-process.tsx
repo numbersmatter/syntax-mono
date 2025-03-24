@@ -1,7 +1,10 @@
 import {
   Card,
   CardContent,
-  CardFooter
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
 } from "~/components/ui/card";
 import {
   AlertDialog,
@@ -45,6 +48,21 @@ export default function PickupForm({ loaderData }: Route.ComponentProps) {
   return (
     <Card className="flex flex-col flex-1 pb-4"
     >
+      <CardHeader>
+        <CardTitle>
+          {
+            reservation.primaryContact.fname
+            + " "
+            + reservation.primaryContact.lname
+          }
+        </CardTitle>
+        <CardDescription>
+          {reservation.time}
+        </CardDescription>
+        <CardDescription>
+          {reservation.primaryContact.phone} {" | "} {reservation.primaryContact.email}
+        </CardDescription>
+      </CardHeader>
       <CardContent
         className="flex-1 grid grid-cols-1 py-8 place-content-center"
       >

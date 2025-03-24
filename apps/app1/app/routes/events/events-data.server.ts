@@ -16,6 +16,7 @@ import { getServerEnv } from "~/env.server";
 import { createClerkClient } from "@clerk/react-router/api.server";
 import type { PrimaryContact } from "~/services/firestore/common-types";
 import { getClerkClient } from "~/services/clerk/clerk-interface.server";
+import type { UserAppModel } from "~/services/firestore/users/user-types";
 
 // Data fetchers
 export const getEvents = async () => {
@@ -132,21 +133,44 @@ export const getEventStats = async ({ eventId }: { eventId: string }) => {
   //  remove users who do not have registration Docs
   const registeredDocs = registrationQuery.filter((r) => r !== null);
 
+  // new code for pulling from userdocs collection
+
+  const userDocsArray = await foodPantryDb.users.readListOfUsers({
+    userList: userIds,
+  });
+
+  const userDocs = userDocsArray
+    .filter((doc) => doc.status === "fulfilled")
+    .map((doc) => doc.value)
+    .filter((doc) => doc !== null);
+
+  const userDocStudentArray = userDocs.map((doc) => doc.students).flat();
+
   // get an array of all students then create separate lists by school
   const studentsArray = registeredDocs.map((doc) => doc.students).flat();
 
-  const ldeStudents = studentsArray.filter((s) => s.school === "lde");
-  const tpsStudents = studentsArray.filter((s) => s.school === "tps");
-  const tmsStudents = studentsArray.filter((s) => s.school === "tms");
-  const thsStudents = studentsArray.filter((s) => s.school === "ths");
+  const ldeStudents = userDocStudentArray.filter((s) => s.school === "lde");
+  const tpsStudents = userDocStudentArray.filter((s) => s.school === "tps");
+  const tmsStudents = userDocStudentArray.filter((s) => s.school === "tms");
+  const thsStudents = userDocStudentArray.filter((s) => s.school === "ths");
+
+  // const ldeStudents = studentsArray.filter((s) => s.school === "lde");
+  // const tpsStudents = studentsArray.filter((s) => s.school === "tps");
+  // const tmsStudents = studentsArray.filter((s) => s.school === "tms");
+  // const thsStudents = studentsArray.filter((s) => s.school === "ths");
 
   // get array of all adults
-  const adults = registeredDocs
+  const adults = userDocs
     .map((d) => d.household_adults)
     .reduce((a, c) => a + c, 0);
 
   //  find users missing some registration data
-  const uncounted = userIds.length - registeredDocs.length;
+  const uncounted = userIds.length - userDocs.length;
+
+  // find missing userId doc
+  const userDocIds = userDocs.map((doc) => doc.id);
+
+  const missingIds = userIds.filter((id) => !userDocIds.includes(id));
 
   // create stats needed
   const stats = [
@@ -166,6 +190,7 @@ export const getEventStats = async ({ eventId }: { eventId: string }) => {
     registeredDocs,
     approvedReservations,
     reservationsDelivered,
+    missingIds,
   };
 };
 

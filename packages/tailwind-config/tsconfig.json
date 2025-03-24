@@ -1,0 +1,5 @@
+{
+  "extends": "@syntax-mono/typescript-config",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"]
+}

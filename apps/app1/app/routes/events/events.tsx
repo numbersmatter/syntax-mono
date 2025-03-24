@@ -107,9 +107,9 @@ function EventsHistoryTable({ events }: { events: EventAppModel[] }) {
     },
     {
       accessorKey: 'id',
-      header: 'Id',
+      header: 'Stage',
       cell: ({ row }) => <Link to={`/events/${row.original.id}`}>
-        {row.original.id}
+        {row.original.stage}
       </Link>
     }
   ]
