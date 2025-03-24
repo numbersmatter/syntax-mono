@@ -80,8 +80,8 @@ function MissingIds() {
     clerkUsers
   } = useLoaderData<typeof loader>();
   return <div className="px-4 py-2">
-    <h1>Missing Ids</h1>
-    <p>There are missing ids in the route</p>
+    <h1>Missing Info </h1>
+    <p>Reporting is Missing information on following clients</p>
     <ul>
       {missingIds.map((id) => {
         return <li key={id}>{id}</li>
