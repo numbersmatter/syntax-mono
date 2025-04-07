@@ -181,6 +181,7 @@ export const getEventStats = async ({ eventId }: { eventId: string }) => {
     { name: "Elementary School", stat: ldeStudents.length },
     { name: "Primary School", stat: tpsStudents.length },
     { name: "Missing Info", stat: uncounted },
+    { name: "Approved Requests", stat: approvedReservations.length },
   ];
 
   return {
