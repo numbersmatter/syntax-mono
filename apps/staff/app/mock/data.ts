@@ -3,7 +3,7 @@ import type { Order, Event } from "./types";
 export const mockEvents: Event[] = [
   {
     id: "e1",
-    name: "Tech Innovation Summit 2024",
+    name: "April 4 Pickup",
     type: "conference",
     status: "planning",
     date: "2024-06-15T09:00:00Z",
@@ -11,7 +11,7 @@ export const mockEvents: Event[] = [
       "Annual technology conference showcasing the latest innovations",
     image:
       "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1000",
-    capacity: 200,
+    capacity: 20,
   },
   {
     id: "e2",
@@ -22,7 +22,7 @@ export const mockEvents: Event[] = [
     description: "Hands-on workshop for digital marketing professionals",
     image:
       "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1000",
-    capacity: 50,
+    capacity: 53,
   },
   {
     id: "e3",
@@ -33,7 +33,7 @@ export const mockEvents: Event[] = [
     description: "Executive leadership development program",
     image:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1000",
-    capacity: 100,
+    capacity: 10,
   },
 ];
 

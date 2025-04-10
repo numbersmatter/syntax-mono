@@ -52,28 +52,22 @@ function Dashboard() {
   }, []);
   const statCards = [
     {
-      title: 'Total Events',
+      title: 'Upcoming Events',
       value: stats.totalEvents,
       icon: CalendarDaysIcon,
       color: 'bg-blue-500',
     },
     {
-      title: 'Total Orders',
-      value: stats.totalOrders,
-      icon: ShoppingBagIcon,
-      color: 'bg-green-500',
-    },
-    {
-      title: 'Total Capacity',
+      title: 'Orders To Review',
       value: stats.totalCapacity,
       icon: UsersIcon,
       color: 'bg-purple-500',
     },
     {
-      title: 'Upcoming Events',
-      value: stats.upcomingEvents,
-      icon: CalendarIcon,
-      color: 'bg-indigo-500',
+      title: 'Orders Approved',
+      value: stats.totalOrders,
+      icon: ShoppingBagIcon,
+      color: 'bg-green-500',
     },
   ];
 
