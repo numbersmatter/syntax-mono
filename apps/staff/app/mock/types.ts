@@ -1,6 +1,6 @@
 export type OrderStatus = "pending" | "approved" | "waitlisted" | "declined";
 
-export type EventType = "conference" | "workshop" | "seminar" | "webinar";
+export type EventType = "pickup" | "drivethru" | "doordash";
 
 export type EventStatus =
   | "planning"

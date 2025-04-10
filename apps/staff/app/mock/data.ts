@@ -4,36 +4,36 @@ export const mockEvents: Event[] = [
   {
     id: "e1",
     name: "April 4 Pickup",
-    type: "conference",
+    type: "pickup",
     status: "planning",
     date: "2024-06-15T09:00:00Z",
     description:
       "Annual technology conference showcasing the latest innovations",
     image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1000",
+      "https://images.unsplash.com/photo-1577705998148-6da4f3963bc8?auto=format&fit=crop&q=80&w=1000",
     capacity: 20,
   },
   {
     id: "e2",
-    name: "Digital Marketing Workshop",
-    type: "workshop",
+    name: "April 11 DoorDash Orders",
+    type: "doordash",
     status: "open_orders",
     date: "2024-04-20T13:00:00Z",
-    description: "Hands-on workshop for digital marketing professionals",
+    description: "Weekly DoorDash",
     image:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1000",
+      "https://images.unsplash.com/photo-1648091855444-76f97897dcd4?auto=format&fit=crop&q=80&w=1000",
     capacity: 53,
   },
   {
     id: "e3",
-    name: "Leadership Seminar",
-    type: "seminar",
+    name: "April Drivethru",
+    type: "drivethru",
     status: "open_pickups",
     date: "2024-05-10T10:00:00Z",
-    description: "Executive leadership development program",
+    description: "End of Semester Drive-thru",
     image:
-      "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1000",
-    capacity: 10,
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
   },
 ];
 
