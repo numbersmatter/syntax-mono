@@ -3,7 +3,7 @@ import { Outlet } from 'react-router'
 import { MainNavBar } from '~/blocks/nav-bars'
 import { MainSideBar } from '~/blocks/side-bars'
 
-export function MainLayout() {
+export default function MainLayout() {
   return (
     <SidebarLayout
       navbar={
