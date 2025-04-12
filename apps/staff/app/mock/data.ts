@@ -35,6 +35,118 @@ export const mockEvents: Event[] = [
       "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
     capacity: 40,
   },
+  {
+    id: "e4",
+    name: "test 4 ",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e5",
+    name: "test 5",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e6",
+    name: "test 6",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e7",
+    name: "test 7",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e8",
+    name: "Test 8",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e9",
+    name: "test 9",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e10",
+    name: "test 10",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e11",
+    name: "test 11",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e12",
+    name: "test 12",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+  {
+    id: "e13",
+    name: "test 13",
+    type: "drivethru",
+    status: "open_pickups",
+    date: "2024-05-10T10:00:00Z",
+    description: "End of Semester Drive-thru",
+    image:
+      "https://images.unsplash.com/photo-1509315703195-529879416a7d?auto=format&fit=crop&q=80&w=1000",
+    capacity: 40,
+  },
+ 
+  
 ];
 
 export const mockOrders: Order[] = [
