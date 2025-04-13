@@ -12,6 +12,7 @@ export default [
     ...prefix("events", [
       index("routes/events-page.tsx"),
       route("list", "routes/event-list.tsx"),
+      route(":eventId", "routes/event-details.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;

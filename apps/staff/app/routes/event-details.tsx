@@ -9,6 +9,9 @@ import {
 import { useState } from 'react';
 import { OrderCard } from '~/blocks/OrderCard';
 import { mockEvents, mockOrders } from '~/mock/data';
+import type { Route } from './+types/event-details';
+
+
 
 
 
@@ -19,11 +22,21 @@ interface EventDetailsPageProps {
   onEdit: (eventId: string) => void;
 }
 
-export function EventDetailsPage({
-  eventId, onBack, onEdit
-}: EventDetailsPageProps
-) {
-  const event = mockEvents.find(e => e.id === eventId);
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
+
+  const event = mockEvents[0];
+
+
+
+  return { event }
+};
+
+
+export default function EventDetailsPage({ loaderData }: Route.ComponentProps) {
+
+  const event = loaderData.event;
+
+  const eventId = event.id;
   const [orders, setOrders] = useState<Order[]>(
     mockOrders.filter(order => order.eventId === eventId)
   );
@@ -33,6 +46,17 @@ export function EventDetailsPage({
       order.id === orderId ? { ...order, status: newStatus } : order
     ));
   };
+
+  const onBack = () => {
+    // Navigate back to the event list
+    return console.log("Back to event list");
+  };
+
+  const onEdit = (eventId: string) => {
+    // Navigate to the edit event page
+    return console.log(`Edit event ${eventId}`);
+  };
+
 
   if (!event) {
     return <div>Event not found</div>;
@@ -45,21 +69,25 @@ export function EventDetailsPage({
     finished: { color: 'bg-purple-100 text-purple-800' }
   };
 
+  // const eventImage = event.image.split('?')[0];
+
+  const eventImage = "https://images.unsplash.com/photo-1577705998148-6da4f3963bc8"
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="h-64 relative overflow-hidden">
+      <div className="h-64 relative overflow-hidden bg-amber-500" >
         <img
-          src={event.image}
+          src={eventImage}
           alt={event.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-50" />
+        {/* <div className="absolute inset-0 bg-black bg-opacity-50" /> */}
         <button
           onClick={onBack}
           className="absolute top-4 left-4 flex items-center gap-2 text-white hover:text-gray-200 transition-colors"
         >
           <ArrowLeftIcon className="w-5 h-5" />
-          Back to Events
+          Back
         </button>
         <button
           onClick={() => onEdit(event.id)}
@@ -95,7 +123,7 @@ export function EventDetailsPage({
               </div>
               <div className="flex items-center gap-2">
                 <UsersIcon className="w-5 h-5 text-gray-400" />
-                <span>Capacity: {event.capacity}</span>
+                <span>Reservations: {event.capacity}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPinIcon className="w-5 h-5 text-gray-400" />
