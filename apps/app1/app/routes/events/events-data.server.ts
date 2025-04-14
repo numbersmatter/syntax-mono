@@ -32,7 +32,19 @@ export const getOpenEvents = async () => {
     (event) => event.stage != "event-finished"
   );
 
-  return openEvents;
+  const reservationsPromises = openEvents.map((eventDoc) =>
+    foodPantryDb.reservations.listByEvent({ eventId: eventDoc.id })
+  );
+
+  const reservationSettled = await Promise.allSettled(reservationsPromises);
+
+  const returnedReservations = reservationSettled
+    .filter((r) => r.status == "fulfilled")
+    .map((r) => r.value);
+
+  returnedReservations;
+
+  return { openEvents, returnedReservations };
 };
 
 export const getClerkData = async ({ userId }: { userId: string }) => {

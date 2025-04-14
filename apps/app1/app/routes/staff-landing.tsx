@@ -15,19 +15,19 @@ import type { Route } from "./+types/staff-landing";
 export async function loader({ params, request }: Route.LoaderArgs) {
   await requireAuth({ request });
 
+  const { openEvents, returnedReservations } = await getOpenEvents();
+  const reservations = returnedReservations.flat();
 
-  const openEvents = await getOpenEvents();
 
   const stats = {
     totalEvents: openEvents.length,
-    totalOrders: 0,
+    totalOrders: reservations.length,
     totalCapacity: 0,
-    ordersByStatus: {
-      pending: 0,
-      approved: 0,
-      waitlisted: 0,
-      declined: 0,
-    },
+    pending: reservations.filter((r) => r.status === 'pending').length,
+    approved: reservations.filter((r) => r.status === 'approved').length,
+    waitlisted: reservations.filter((r) => r.status === 'waitlist').length,
+    declined: reservations.filter((r) => r.status === 'declined').length,
+
     upcomingEvents: 0,
   }
 
@@ -40,7 +40,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   //   };
 
 
-  return { stats, openEvents }
+
+  return { stats, openEvents, returnedReservations, reservations }
 
 }
 
@@ -51,10 +52,33 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
 
 export default function StaffLanding({ loaderData }: Route.ComponentProps) {
-  const { stats, openEvents } = loaderData;
+  const { stats, openEvents, reservations } = loaderData;
   const navigation = useNavigate();
 
   const onEventClick = (eventId: string) => navigation(`/events/${eventId}`);
+
+  const eventsWithStats = openEvents.map((event) => {
+    const eventReservations = reservations.filter((r) => r.eventId === event.id);
+    const totalCapacity = 0
+    const totalOrders = eventReservations.length;
+    const pending = eventReservations.filter((r) => r.status === 'pending').length;
+    const approved = eventReservations.filter((r) => r.status === 'approved').length;
+    const waitlisted = eventReservations.filter((r) => r.status === 'waitlist').length;
+    const declined = eventReservations.filter((r) => r.status === 'declined').length;
+
+
+
+    return {
+      ...event,
+      totalOrders,
+      totalCapacity,
+      pending,
+      approved,
+      waitlisted,
+      declined,
+    };
+  });
+
 
   return (
     <div className="px-4 py-4 space-y-8">
@@ -67,10 +91,20 @@ export default function StaffLanding({ loaderData }: Route.ComponentProps) {
           Upcoming Events
         </h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {openEvents.map((event) => (
-            <EventCard key={event.id} event={event} onEventClick={onEventClick} />
-          ))}
+          {eventsWithStats.map((event) => {
+
+            return <EventCard
+              key={event.id}
+              event={event}
+              onEventClick={onEventClick}
+            />
+          })}
         </div>
+      </section>
+      <section>
+        <pre>
+          {JSON.stringify(stats, null, 2)}
+        </pre>
       </section>
     </div>
   );
@@ -116,13 +150,13 @@ function Dashboard() {
     },
     {
       title: 'Orders To Review',
-      value: stats.totalCapacity,
+      value: stats.pending,
       icon: UsersIcon,
       color: 'bg-purple-500',
     },
     {
       title: 'Orders Approved',
-      value: stats.totalOrders,
+      value: stats.approved,
       icon: ShoppingBagIcon,
       color: 'bg-green-500',
     },

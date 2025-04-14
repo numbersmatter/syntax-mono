@@ -1,11 +1,18 @@
 import { ArrowRightCircleIcon, CalendarDaysIcon, CheckCircleIcon, ClockIcon, UsersIcon } from "lucide-react";
 import type { EventAppModel } from "~/services/firestore/events/event-types";
 
-
+interface EventWithStats extends EventAppModel {
+  totalOrders: number;
+  totalCapacity: number;
+  pending: number;
+  approved: number;
+  waitlisted: number;
+  declined: number;
+}
 
 
 interface EventCardProps {
-  event: EventAppModel;
+  event: EventWithStats;
   onEventClick: (eventId: string) => void;
 }
 
@@ -63,7 +70,7 @@ export function EventCard({ event, onEventClick }: EventCardProps) {
               <ClockIcon className="w-5 h-5 text-blue-500" />
               <div>
                 <div className="text-2xl font-semibold">
-                  0
+                  {event.totalOrders}
                 </div>
                 <div className="text-sm text-gray-500">Total Orders</div>
               </div>
@@ -72,7 +79,7 @@ export function EventCard({ event, onEventClick }: EventCardProps) {
               <CheckCircleIcon className="w-5 h-5 text-green-500" />
               <div>
                 <div className="text-2xl font-semibold">
-                  0
+                  {event.approved}
                 </div>
                 <div className="text-sm text-gray-500">Approved</div>
               </div>

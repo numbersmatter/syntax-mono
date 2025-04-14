@@ -37,15 +37,15 @@ export default function EventDetailsPage({ loaderData }: Route.ComponentProps) {
   const event = loaderData.event;
 
   const eventId = event.id;
-  const [orders, setOrders] = useState<Order[]>(
-    mockOrders.filter(order => order.eventId === eventId)
-  );
+  // const [orders, setOrders] = useState<Order[]>(
+  //   mockOrders.filter(order => order.eventId === eventId)
+  // );
 
-  const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
-    setOrders(orders.map(order =>
-      order.id === orderId ? { ...order, status: newStatus } : order
-    ));
-  };
+  // const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
+  //   setOrders(orders.map(order =>
+  //     order.id === orderId ? { ...order, status: newStatus } : order
+  //   ));
+  // };
 
   const onBack = () => {
     // Navigate back to the event list
@@ -133,7 +133,7 @@ export default function EventDetailsPage({ loaderData }: Route.ComponentProps) {
           </div>
         </div>
 
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Orders</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {orders.map((order) => (
@@ -149,8 +149,9 @@ export default function EventDetailsPage({ loaderData }: Route.ComponentProps) {
               No orders yet for this event
             </div>
           )}
-        </div>
+        </div> */}
       </div>
+
     </div>
   );
 }
