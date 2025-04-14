@@ -8,7 +8,7 @@ import {
 
 export default [
   layout("routes/layout.tsx", [
-    index("routes/home.tsx"),
+    index("routes/staff-landing.tsx"),
     ...prefix("events", [
       index("routes/events/events.tsx"),
       route("create", "routes/events/create-event.tsx"),

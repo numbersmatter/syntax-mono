@@ -25,6 +25,16 @@ export const getEvents = async () => {
   return allEvents;
 };
 
+export const getOpenEvents = async () => {
+  const allEvents = await foodPantryDb.events.list();
+
+  const openEvents = allEvents.filter(
+    (event) => event.stage != "event-finished"
+  );
+
+  return openEvents;
+};
+
 export const getClerkData = async ({ userId }: { userId: string }) => {
   const clerkId = "user_" + userId;
 
