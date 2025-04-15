@@ -1,8 +1,8 @@
 import { Link, useLoaderData } from "react-router";
 import type { Route } from "./+types/eventIdIndex";
 import { getEventStats } from "./events-data.server";
-import { ChevronRightIcon } from "lucide-react";
-import { convertTo12Hour } from "~/lib/utils";
+import { Building2, ChevronRightIcon, CreditCardIcon, UserIcon, UsersIcon } from "lucide-react";
+import { cn, convertTo12Hour } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { getClerkDataFromUserIds } from "~/services/clerk/clerk-interface.server";
 // import { ChartConfig } from "~/staff/components/ui/chart";
@@ -53,23 +53,49 @@ export default function EventIdIndex({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <AddFamilyNavition />
+      <ActivityNavition />
       <ReportingCards />
       <MissingIds />
-      <RequestList />
     </>
   )
 }
 
 
-function AddFamilyNavition() {
+function ActivityNavition() {
 
-  return <div className="flex gap-4 py-4 px-4">
-    <Link to="add-family" className="text-blue-600">
-      <Button>
-        Add Family
-      </Button>
-    </Link>
+  const tabs = [
+    { name: 'Process Requests', href: 'process-requests', icon: UsersIcon, current: false },
+    { name: 'Pickup Page', href: 'pickup', icon: CreditCardIcon, current: false },
+  ]
+
+
+  return <div className="py-4">
+    <div className="border-b border-gray-200">
+      <nav aria-label="Tabs" className="-mb-px flex space-x-8">
+        {tabs.map((tab) => (
+          <Link
+            key={tab.name}
+            to={tab.href}
+            aria-current={tab.current ? 'page' : undefined}
+            className={cn(
+              tab.current
+                ? 'border-indigo-500 text-indigo-600'
+                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+              'group inline-flex items-center border-b-2 px-1 py-4 text-sm font-medium',
+            )}
+          >
+            <tab.icon
+              aria-hidden="true"
+              className={cn(
+                tab.current ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500',
+                'mr-2 -ml-0.5 size-5',
+              )}
+            />
+            <span>{tab.name}</span>
+          </Link>
+        ))}
+      </nav>
+    </div>
   </div>
 
 }

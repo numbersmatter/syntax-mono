@@ -7,10 +7,10 @@ import {
   useLoaderData
 } from 'react-router';
 import { requireAuth } from '~/services/firebase-auth/auth-funcs.server';
-import { getEventData } from './events-data.server';
+import { getEventData, getEventStats } from './events-data.server';
 import { cn } from '~/lib/utils';
 import type { Route } from './+types/eventid-nav';
-import { ArrowLeftIcon, CalendarIcon, ChevronDownIcon, MapPinIcon, Settings, UsersIcon } from 'lucide-react';
+import { ArrowLeftIcon, CalendarIcon, ChevronDownIcon, MapPinIcon, Notebook, Settings, UsersIcon } from 'lucide-react';
 
 
 // import { mutations } from './data/mutations.server';
@@ -25,11 +25,12 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
     eventId: params.eventId
   });
 
+  const eventIndexData = await getEventStats({ eventId: params.eventId })
 
 
   // const eventId = args.params.eventId as string;
   // const data = await getPageData({ eventId });
-  return { ...eventData }
+  return { ...eventData, ...eventIndexData }
 };
 
 export const action = async (args: ActionFunctionArgs) => {
@@ -70,20 +71,50 @@ export default function Page({ loaderData }: Route.ComponentProps) {
           className="w-full h-full object-cover"
         />
         {/* <div className="absolute inset-0 bg-black bg-opacity-50" /> */}
-        <button
-          onClick={onBack}
-          className="absolute top-4 left-4 flex items-center gap-2 text-white hover:text-gray-200 transition-colors"
-        >
-          <ArrowLeftIcon className="w-5 h-5" />
-          Back
-        </button>
-        <button
-          onClick={() => onEdit(event.id)}
-          className="absolute top-4 right-4 flex items-center gap-2 bg-white text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
-        >
-          <Settings className="w-4 h-4" />
-          Edit Event
-        </button>
+
+        <nav >
+          <NavLink
+            to="/events"
+            onClick={onBack}
+            className="absolute top-4 left-4 flex items-center gap-2 text-white hover:text-gray-200 transition-colors"
+          >
+            <ArrowLeftIcon className="w-5 h-5" />
+            Back to Events
+          </NavLink>
+
+
+          <NavLink
+            to={`/events/${event.id}/edit`}
+            end
+            className={(
+              { isActive, isPending, isTransitioning }
+            ) => {
+              const styleClasses = isActive ? 'hidden' : "absolute top-4 right-4 flex items-center gap-2 bg-white text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+
+              return styleClasses
+            }
+            }
+
+          >
+            <Settings className="w-4 h-4" />
+            Edit Event
+          </NavLink>
+          <NavLink
+            to={`/events/${event.id}`}
+            end
+            className={(
+              { isActive, isPending, isTransitioning }
+            ) => {
+              const styleClasses = isActive ? 'hidden' : "absolute top-4 right-4 flex items-center gap-2 bg-white text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+
+              return styleClasses
+            }
+            }
+          >
+            <Notebook className="w-4 h-4" />
+            Event Main
+          </NavLink>
+        </nav>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 -mt-8 relative z-10 sm:px-6 lg:px-8">
@@ -123,28 +154,22 @@ export default function Page({ loaderData }: Route.ComponentProps) {
             <div className="mt-3 sm:mt-4">
 
               <div className="">
-                <nav className="isolate flex divide-x divide-gray-200 rounded-lg shadow">
-                  {tabs.map((tab) => (
-                    <NavLink
-                      key={tab.name}
-                      to={tab.to}
-                      end={tab.end}
-                      reloadDocument
-                      className={(
-                        { isActive, isPending, isTransitioning }
-                      ) => {
-                        const styleClasses = isActive ? 'border-indigo-500 text-accent-foreground bg-accent' : ' text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                <nav className="isolate flex divide-x divide-gray-200 rounded-lg ">
+                  <NavLink
+                    to={`/events/${event.id}`}
+                    end
+                    className={(
+                      { isActive, isPending, isTransitioning }
+                    ) => {
+                      const styleClasses = isActive ? 'hidden' : "inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 
-                        return cn(
-                          styleClasses,
-                          'roup relative min-w-0 flex-1 overflow-hidden px-4 py-4 text-center font-medium first:rounded-l-lg last:rounded-r-lg text-lg')
-                        // : cn('border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'whitespace-nowrap border-b-2 px-1 pb-4 text-lg font-medium ')
-                      }
-                      }
-                    >
-                      {tab.name}
-                    </NavLink>
-                  ))}
+                      return styleClasses
+                    }}
+                  >
+                    <Notebook className="w-4 h-4" />
+                    Return to Event Main Page
+                  </NavLink>
+
                 </nav>
 
 

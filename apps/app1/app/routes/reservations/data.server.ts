@@ -47,7 +47,49 @@ const approveReservation = async ({ formData }: { formData: FormData }) => {
     },
   });
 
-  return redirect(`/events/${submission.value.eventId}`);
+  return;
 };
 
-export const mutations = { approveReservation };
+const waitlistReservation = async ({ formData }: { formData: FormData }) => {
+  const submission = parseWithZod(formData, {
+    schema: ApproveReservaitonSchema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  await foodPantryDb.reservations.update({
+    id: submission.value.reservationId,
+    data: {
+      status: "waitlist",
+    },
+  });
+
+  return submission.reply();
+};
+
+const declineReservation = async ({ formData }: { formData: FormData }) => {
+  const submission = parseWithZod(formData, {
+    schema: ApproveReservaitonSchema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  await foodPantryDb.reservations.update({
+    id: submission.value.reservationId,
+    data: {
+      status: "declined",
+    },
+  });
+
+  return submission.reply();
+};
+
+export const mutations = {
+  approveReservation,
+  waitlistReservation,
+  declineReservation,
+};

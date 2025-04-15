@@ -24,6 +24,9 @@ export default [
           index("routes/events/pickup-list.tsx"),
           route(":reservationId", "routes/events/pickup-process.tsx"),
         ]),
+        ...prefix("process-requests", [
+          index("routes/events/process-requests.tsx"),
+        ]),
       ]),
     ]),
     ...prefix("reservations", [
