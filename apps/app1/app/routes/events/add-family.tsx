@@ -37,11 +37,21 @@ export default function AddFamily({ loaderData }: Route.ComponentProps) {
   const { addableFamilies } = loaderData
 
   return (
-    <Card>
-      <CardContent>
-        <UnaddedFamilyTable families={addableFamilies} />
-      </CardContent>
-    </Card>
+    <div>
+      <div className="border-b border-gray-200 pb-5">
+        <h3 className="text-base font-semibold text-gray-900">
+          Add Client
+        </h3>
+        <p className="mt-2 max-w-4xl text-sm text-gray-500">
+          This page allows staff to manually add clients to the event. Staff can search for clients already in the database. Once a client is found, staff can click the "Add" button to add a request for them to the event. That request will show up in the "Process Requests" tab.
+        </p>
+      </div>
+      <Card>
+        <CardContent>
+          <UnaddedFamilyTable families={addableFamilies} />
+        </CardContent>
+      </Card>
+    </div>
   )
 
 }
@@ -142,16 +152,8 @@ function UnaddedFamilyTable({ families }: { families: UserRow[] }) {
   const { eventId } = useParams();
 
   return (
-    <div>
 
-      <DataTable columns={columns} data={families} />
-      <div>
-        <Link to={`/events/${eventId}`}>
-          <Button variant={"secondary"}>
-            Back
-          </Button>
-        </Link>
-      </div>
-    </div>
+    <DataTable columns={columns} data={families} />
+
   )
 } 

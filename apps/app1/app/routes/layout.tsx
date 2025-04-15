@@ -21,6 +21,10 @@ const data = {
       url: "home",
       items: [
         {
+          title: "Home",
+          url: "/",
+        },
+        {
           title: "Events",
           url: "/events",
         },

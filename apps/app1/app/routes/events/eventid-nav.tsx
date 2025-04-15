@@ -39,7 +39,9 @@ export const action = async (args: ActionFunctionArgs) => {
 };
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-  const { event, tabs } = loaderData;
+  const { event, tabs, requests } = loaderData;
+
+  const number_requests = requests.length;
 
 
   const onBack = () => {
@@ -126,7 +128,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
                   {event.type}
                 </div>
                 <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusConfig[event.stage].color}`}>
-                  {event.stage.replace('_', ' ').split(' ').map(word =>
+                  {event.stage.replace('-', ' ').split(' ').map(word =>
                     word.charAt(0).toUpperCase() + word.slice(1)
                   ).join(' ')}
                 </div>
@@ -144,7 +146,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
               </div>
               <div className="flex items-center gap-2">
                 <UsersIcon className="w-5 h-5 text-gray-400" />
-                <span>Reservations: 0</span>
+                <span>Requests: {number_requests}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPinIcon className="w-5 h-5 text-gray-400" />

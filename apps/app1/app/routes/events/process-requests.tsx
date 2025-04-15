@@ -20,13 +20,24 @@ export default function ProcessRequests() {
 function RequestList() {
   const { loaderData } = useOutletContext<EventIdRoute.ComponentProps>();
 
-  const { requests } = loaderData;
+  const { requests, event } = loaderData;
 
   return (
     <div className="flex flex-col gap-4 py-4">
-      <h2 className="text-lg font-semibold text-gray-900 px-2">
-        Reservation Requests
-      </h2>
+      <div className="border-b border-gray-200 pb-5 sm:flex sm:items-center sm:justify-between">
+        <h2 className="text-lg font-semibold text-gray-900 px-2">
+          Reservation Request
+        </h2>
+        <div className="mt-3 sm:mt-0 sm:ml-4">
+          <Link
+            to={`/events/${event.id}/add-family`}
+            type="button"
+            className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Add Client
+          </Link>
+        </div>
+      </div>
       {
         requests.length === 0 && <p className="text-sm text-gray-500">No requests</p>
       }
