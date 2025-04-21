@@ -2,6 +2,7 @@ import { SignIn } from "@clerk/react-router";
 import type { Route } from "./+types/sign-in";
 import { getAuth } from "@clerk/react-router/ssr.server";
 import { redirect } from "react-router";
+import { AuthLayout } from "~/components/auth-layout";
 
 
 export async function loader(args:Route.LoaderArgs) {
@@ -20,6 +21,8 @@ export default function SignInPage() {
 
 
     return (
-        <SignIn />
+        <AuthLayout>
+            <SignIn />
+        </AuthLayout>
     )
 }

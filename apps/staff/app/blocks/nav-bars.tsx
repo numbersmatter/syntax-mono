@@ -24,6 +24,8 @@ import {
   InboxIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid'
+import { SignedIn, UserButton } from '@clerk/react-router'
+
 
 
 
@@ -32,18 +34,22 @@ export function MainNavBar() {
     <Navbar>
       <NavbarSpacer />
       <NavbarSection>
-        <NavbarItem href="/search" aria-label="Search">
-          <MagnifyingGlassIcon />
-        </NavbarItem>
-        <NavbarItem href="/inbox" aria-label="Inbox">
-          <InboxIcon />
-        </NavbarItem>
+      
         {/* <TeamSelector /> */}
+        <UserInfo />
       </NavbarSection>
     </Navbar>
 
   )
 }
+
+function UserInfo(){
+  return <SignedIn>
+    <UserButton />
+  </SignedIn>
+}
+
+
 
 function TeamSelector() {
   return <Dropdown>

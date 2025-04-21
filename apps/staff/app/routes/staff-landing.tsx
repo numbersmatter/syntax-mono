@@ -1,17 +1,27 @@
 import { CalendarDaysIcon, CalendarIcon, ChartBarIcon, CheckCircleIcon, CircleStackIcon, ClockIcon, ShoppingBagIcon, UsersIcon, XCircleIcon } from "@heroicons/react/20/solid";
 import { useMemo } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, type LoaderFunctionArgs } from "react-router";
 import { EventCard } from "~/blocks/EventCard";
 import { mockEvents, mockOrders } from "~/mock/data";
+import { requireAuth } from "~/services/clerk-auth.server";
+import type { Route } from "./+types/staff-landing";
+
+
+export async function loader(args: Route.LoaderArgs) {
+  const rep = await requireAuth(args);
+  console.log("testAuth", rep);
+  return {rep};
+}
 
 
 
 
 
-
-export default function StaffLanding() {
+export default function StaffLanding({loaderData}: Route.ComponentProps) {
   const navigation = useNavigate();
+  const { rep } = loaderData;
 
+  console.log("rep", rep);
   const onEventClick = (eventId: string) => navigation(`/events/${eventId}`);
 
   return (
@@ -117,17 +127,17 @@ function Dashboard() {
       {statCards.map((stat) => {
         const Icon = stat.icon;
         return (
-          <div key={stat.title} className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center gap-4">
-              <div className={`${stat.color} p-3 rounded-lg`}>
-                <Icon className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">{stat.title}</p>
-                <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
-              </div>
+          <div key={stat.title} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+          <div className="flex items-center gap-4">
+            <div className={`${stat.color} p-3 rounded-lg`}>
+              <Icon className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{stat.title}</p>
+              <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stat.value}</p>
             </div>
           </div>
+        </div>
         );
       })}
     </div>
@@ -138,14 +148,11 @@ function Dashboard() {
 
 function SectionHeader() {
   return (
-
-    // <div className="bg-amber-400 mx-auto px-4 py-4 sm:px-6 lg:px-8">
-    <div className="flex items-center gap-2">
-      <ChartBarIcon className="w-6 h-6 text-indigo-600" />
-      <h1 className="text-3xl font-semibold text-gray-900">
+    <div className="flex items-center gap-2 py-4  shadow-sm ">
+      <ChartBarIcon className="w-6 h-6 text-indigo-600 dark:text-indigo-400"/>
+      <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">
         Dashboard
       </h1>
     </div>
-    // </div>
   )
 }

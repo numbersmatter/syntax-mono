@@ -45,11 +45,15 @@ export const getClerkAuth = async (args: LoaderFunctionArgs) => {
 const requireAuth = async (args: LoaderFunctionArgs) => {
   const clerkAuth  = await getAuth(args);
 
-  if(!clerkAuth.userId) {
-    return  redirect("/sign-in");
+  const userId = clerkAuth.userId;
+
+  if(!userId) {
+    throw  redirect("/sign-in");
   }
   
-  return clerkAuth;
+  return {
+    userId
+  };
 };
 
 export { requireAuth };

@@ -15,5 +15,5 @@ export default [
       route(":eventId", "routes/event-details.tsx"),
     ]),
   ]),
-  route("sign-in", "routes/sign-in.tsx"),
+  route("sign-in/*", "routes/sign-in.tsx"),
 ] satisfies RouteConfig;
