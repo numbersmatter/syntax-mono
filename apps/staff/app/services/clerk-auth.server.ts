@@ -2,7 +2,6 @@ import { getAuth } from "@clerk/react-router/ssr.server";
 import { createClerkClient } from "@clerk/react-router/api.server";
 
 import {
-  type LoaderFunction,
   type LoaderFunctionArgs,
   redirect,
 } from "react-router";
@@ -44,27 +43,13 @@ export const getClerkAuth = async (args: LoaderFunctionArgs) => {
 };
 
 const requireAuth = async (args: LoaderFunctionArgs) => {
-  // const userId = "bROxxo3adedzFYFaOy7t"
+  const clerkAuth  = await getAuth(args);
 
-  // const email = "test@testemail.com"
-  // const phone = "555-555-555"
-  // const fname = "test"
-  // const lname= "user"
-
-  const {  userId, email, phone, fname, lname } =
-    await getClerkAuth(args);
-
-  if (!userId) {
-    throw redirect("/sign-in");
+  if(!clerkAuth.userId) {
+    return  redirect("/sign-in");
   }
-
-  return {
-    userId,
-    email,
-    phone,
-    fname,
-    lname,
-  };
+  
+  return clerkAuth;
 };
 
 export { requireAuth };
