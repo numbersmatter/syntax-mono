@@ -1,5 +1,5 @@
 {
-  "name": "staff",
+  "name": "@syntax-mono/staff",
   "private": true,
   "type": "module",
   "scripts": {
