@@ -55,7 +55,7 @@ export function MainSideBar() {
     <Sidebar>
       <SidebarHeader>
         {/* <TeamSelector /> */}
-        <SidebarSection className="max-lg:hidden">
+        {/* <SidebarSection className="max-lg:hidden">
           <SidebarItem href="/search">
             <MagnifyingGlassIcon />
             <SidebarLabel>Search</SidebarLabel>
@@ -64,7 +64,7 @@ export function MainSideBar() {
             <InboxIcon />
             <SidebarLabel>Inbox</SidebarLabel>
           </SidebarItem>
-        </SidebarSection>
+        </SidebarSection> */}
       </SidebarHeader>
       <SidebarBody>
         <SidebarSection>
@@ -84,20 +84,20 @@ export function MainSideBar() {
             <Cog6ToothIcon />
             <SidebarLabel>Settings</SidebarLabel>
           </SidebarItem>
-          <SidebarItem href="/broadcasts">
+          {/* <SidebarItem href="/broadcasts">
             <MegaphoneIcon />
             <SidebarLabel>Announcements</SidebarLabel>
-          </SidebarItem>
+          </SidebarItem> */}
         </SidebarSection>
         <SidebarSection className="max-lg:hidden">
-          <SidebarHeading>Upcoming Events</SidebarHeading>
+          {/* <SidebarHeading>Upcoming Events</SidebarHeading>
           <SidebarItem href="/events/1">Bear Hug: Live in Concert</SidebarItem>
           <SidebarItem href="/events/2">Viking People</SidebarItem>
           <SidebarItem href="/events/3">Six Fingers — DJ Set</SidebarItem>
-          <SidebarItem href="/events/4">We All Look The Same</SidebarItem>
+          <SidebarItem href="/events/4">We All Look The Same</SidebarItem> */}
         </SidebarSection>
         <SidebarSpacer />
-        <SidebarSection>
+        {/* <SidebarSection>
           <SidebarItem href="/support">
             <QuestionMarkCircleIcon />
             <SidebarLabel>Support</SidebarLabel>
@@ -106,12 +106,11 @@ export function MainSideBar() {
             <SparklesIcon />
             <SidebarLabel>Changelog</SidebarLabel>
           </SidebarItem>
-        </SidebarSection>
+        </SidebarSection> */}
       </SidebarBody>
-      <SidebarFooter className="max-lg:hidden">
+      <SidebarFooter className="bg-slate-300  max-lg:hidden ">
         <SignedIn>
-
-       <UserButton showName />
+          <UserButton showName  />
         </SignedIn>
       </SidebarFooter>
     </Sidebar>
