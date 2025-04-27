@@ -9,7 +9,7 @@ import type { Route } from "./+types/staff-landing";
 
 export async function loader(args: Route.LoaderArgs) {
   const rep = await requireAuth(args);
-  console.log("testAuth", rep);
+
   return {rep};
 }
 
@@ -21,7 +21,7 @@ export default function StaffLanding({loaderData}: Route.ComponentProps) {
   const navigation = useNavigate();
   const { rep } = loaderData;
 
-  console.log("rep", rep);
+
   const onEventClick = (eventId: string) => navigation(`/events/${eventId}`);
 
   return (

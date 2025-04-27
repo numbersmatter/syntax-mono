@@ -8,10 +8,14 @@ import {
 } from "react-router";
 import { rootAuthLoader } from "@clerk/react-router/ssr.server";
 import { ClerkProvider, SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/react-router'
+import { useDarkMode } from "~/hooks/useDarkMode";
+import { dark } from "@clerk/themes"
 
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { useEffect, useState } from "react";
+import { set } from "zod";
 
 
 export async  function loader(args: Route.LoaderArgs) {
@@ -52,10 +56,38 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 
 export default function App({loaderData}: Route.ComponentProps) {
+  const [ isDarkMode, setIsDarkmode ] = useState(true);
+  const darkModeTheme = isDarkMode ? dark : undefined;
+
+  useEffect(() => {
+    interface MediaQueryListEvent {
+        matches: boolean;
+    }
+
+    const changeHandler = (event: MediaQueryListEvent): void => {
+        setIsDarkmode(event.matches);
+    };
+
+    const matchMedia = window.matchMedia('(prefers-color-scheme: dark)');
+
+    setIsDarkmode(matchMedia.matches);
+    console.log(matchMedia);
+
+    matchMedia.addEventListener('change', changeHandler);
+
+    return () => {
+    matchMedia.removeEventListener('change', changeHandler);
+    };
+}, []);
+
+
   return <ClerkProvider
     loaderData={loaderData}
     signUpFallbackRedirectUrl="/"
     signInFallbackRedirectUrl={"/"}
+    appearance={{
+      baseTheme: darkModeTheme,
+    }}
   >
 
     <Outlet />;
