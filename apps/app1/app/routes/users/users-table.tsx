@@ -313,3 +313,63 @@ export function UsersHasDocsTable({
   return <DataTable columns={hasDocsColumns} data={usersHasDocs} />
 }
 
+
+
+
+type EventPageEvent ={
+  id: string;
+  name: string;
+  date: string;
+  status: string;
+}
+
+
+function TestTable() {
+  const data = [
+    {
+      id: "1",
+      name: "Event 1",
+      date: "2023-10-01",
+      status: "upcoming"
+    },
+    {
+      id: "2",
+      name: "Event 2",
+      date: "2023-10-02",
+      status: "upcoming"
+    },
+    {
+      id: "3",
+      name: "Event 3",
+      date: "2023-10-03",
+      status: "upcoming"
+    },
+  ]
+
+  const columns = [
+    {
+      accessorKey: 'name',
+      header: 'Name',
+    },
+    {
+      accessorKey: 'date',
+      header: 'Date',
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+    },
+  ]
+
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+   
+    getSortedRowModel: getSortedRowModel(),
+  })
+
+  return <DataTable columns={columns} data={data} />
+}

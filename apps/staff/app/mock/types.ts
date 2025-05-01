@@ -4,8 +4,8 @@ export type EventType = "pickup" | "drivethru" | "doordash";
 
 export type EventStatus =
   | "planning"
-  | "open_orders"
-  | "open_pickups"
+  | "ordering"
+  | "pickup"
   | "finished";
 
 export interface Customer {
@@ -42,3 +42,5 @@ export interface Event {
   image: string;
   capacity: number;
 }
+
+

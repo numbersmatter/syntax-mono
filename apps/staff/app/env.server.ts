@@ -3,6 +3,9 @@ import { z } from "zod";
 const envSchema = z.object({
   CLERK_PUBLISHABLE_KEY: z.string().min(1),
   CLERK_SECRET_KEY: z.string().min(5),
+  SUPABASE_URL: z.string().min(5),
+  SUPABASE_KEY: z.string().min(5),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(5),
 });
 
 export const initEnvVariables = () => {

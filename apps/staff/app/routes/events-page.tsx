@@ -2,7 +2,7 @@
 import { CalendarDateRangeIcon } from '@heroicons/react/16/solid';
 import type { Event } from '../mock/types';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import {
   Table,
   TableBody,
@@ -14,6 +14,7 @@ import {
 import { mockEvents } from '~/mock/data';
 import { CalendarDaysIcon } from '@heroicons/react/20/solid';
 import {
+  createColumnHelper,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -24,20 +25,75 @@ import {
 } from "@tanstack/react-table"
 import { Pagination, PaginationGap, PaginationList, PaginationNext, PaginationPage, PaginationPrevious } from '~/components/pagination';
 import { Button } from '~/components/button';
+import { requireAuth } from '~/services/clerk-auth.server';
+import type { Route } from './+types/events-page';
+import { createClient } from '@supabase/supabase-js';
+import { createServerClient, parseCookieHeader, serializeCookieHeader  } from '@supabase/ssr';
+import { getServerEnv } from '~/env.server';
+import type { Database } from '~/supabase/database';
+
+
+type EventPageEvent ={
+  id: string;
+  name: string;
+  date: string;
+  status: string;
+}
 
 
 
-const users = [
-  {
-    handle: 'jdoe',
-    name: 'John Doe',
-    email: 'jdoe@example.copm',
-    access: 'Admin',
-  },
-]
 
-export default function EventsPage() {
+
+export async function loader(args: Route.LoaderArgs) {
+  await requireAuth(args);
+  // Create a single supabase client for interacting with your database
+  const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = getServerEnv();;
+  const supabase =  createClient<Database>(
+    SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY,
+  )
+
+  const { data, error } = await supabase
+    .from('events')
+    .select('*')
+  
+    console.log("events", data);
+  if (error) {
+    console.error("Error fetching events:", error);
+
+  }
+
+
+
+  const events = data 
+  ?  data.map((event) => {
+
+      return {
+        id: event.id,
+        name: event.name,
+        date: event.start_date,
+        status: event.status,
+      } as EventPageEvent
+    })
+  : [] as EventPageEvent[];
+
+ 
+
+
+
+
+
+  return {events, error};
+}
+
+
+
+
+
+export default function EventsPage({loaderData} : Route.ComponentProps) {
   const navigate = useNavigate();
+
+  const { events } = loaderData;
 
   const onEventClick = (eventId: string) => navigate(`/events/${eventId}`);
 
@@ -63,21 +119,36 @@ export default function EventsPage() {
         </div>
       </div>
       <EventsTable />
+      <pre className="mt-6">
+        <code className="text-sm text-gray-500">
+          {JSON.stringify(events, null, 2)}
+        </code>
+      </pre>
     </div>
   )
 }
 
 
-function EventsTable() {
-  const [sorting, setSorting] = useState<SortingState>([])
-
-  const columns: ColumnDef<Event>[] = [
+const columns: ColumnDef<EventPageEvent>[] = [
+  {
+    id: 'id',
+    header: () => <span>ID</span>,
+    cell: ({ row }) => {
+      const id = row.getValue('id');
+      return (
+        <a href={`/events/${id}`} className="text-blue-600 hover:underline">
+          {id}
+        </a>
+      );
+    },
+  },
+   
     {
-      accessorKey: 'name',
+      id: 'name',
       header: () => <span>Name</span>,
     },
     {
-      accessorKey: 'date',
+      id: 'date',
       header: () => <span>Date</span>,
       cell: ({ row }) => {
         const date = new Date(row.getValue('date'));
@@ -85,17 +156,17 @@ function EventsTable() {
       },
     },
     {
-      accessorKey: 'status',
+      id: 'status',
       header: () => <span>Status</span>,
       cell: ({ row }) => {
-        const status = row.original.status;
+        const status = row.original.status as keyof typeof statusConfig;
         const statusConfig = {
           planning: { color: 'bg-gray-100 text-gray-800' },
-          open_orders: { color: 'bg-green-100 text-green-800' },
-          open_pickups: { color: 'bg-blue-100 text-blue-800' },
+          ordering: { color: 'bg-green-100 text-green-800' },
+          pickup: { color: 'bg-blue-100 text-blue-800' },
           finished: { color: 'bg-purple-100 text-purple-800' }
         };
-        return <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusConfig[status].color}`}>
+        return <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${statusConfig[status]?.color}`}>
           {status.replace('_', ' ').split(' ').map(word =>
             word.charAt(0).toUpperCase() + word.slice(1)
           ).join(' ')}
@@ -104,27 +175,34 @@ function EventsTable() {
     },
   ]
 
-  const data = mockEvents
+
+
+function EventsTable() {
+  const [sorting, setSorting] = useState<SortingState>([])
+  const {events} = useLoaderData<typeof loader>();
+
+  const columnHelper = createColumnHelper<EventPageEvent>()
+
+
+
+
 
 
   const table = useReactTable({
-    data,
+    datas:events,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    state: {
-      sorting,
-    },
+  
   })
 
-  const statusConfig = {
-    planning: { color: 'bg-gray-100 text-gray-800' },
-    open_orders: { color: 'bg-green-100 text-green-800' },
-    open_pickups: { color: 'bg-blue-100 text-blue-800' },
-    finished: { color: 'bg-purple-100 text-purple-800' }
-  };
+  // const statusConfig = {
+  //   planning: { color: 'bg-gray-100 text-gray-800' },
+  //   open_orders: { color: 'bg-green-100 text-green-800' },
+  //   open_pickups: { color: 'bg-blue-100 text-blue-800' },
+  //   finished: { color: 'bg-purple-100 text-purple-800' }
+  // };
 
 
   return (
